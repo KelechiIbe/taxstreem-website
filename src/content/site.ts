@@ -57,7 +57,7 @@ export const NAV: NavItem[] = [
     groups: [
       {
         links: [
-          { label: 'API Documentation', line: 'Guides for tax computation, e-invoicing, bookkeeping, inventory and filing.', href: LINKS.dev, external: true },
+          { label: 'API Documentation', line: 'Guides for tax computation, e-invoicing, accounting, inventory and filing.', href: LINKS.dev, external: true },
           { label: 'Quickstart', line: 'Your first API call in the sandbox.', href: LINKS.dev, external: true },
           { label: 'API Reference', line: 'Every endpoint, request and response.', href: LINKS.dev, external: true },
         ],
@@ -137,7 +137,7 @@ export const STEPS = [
 ]
 
 export const FAQ = [
-  ['What is TaxStreem?', 'TaxStreem is tax and bookkeeping software for businesses and individuals in Nigeria. It keeps your books, issues your invoices, manages your inventory, and prepares and files your VAT, WHT, CIT and PIT returns.'],
+  ['What is TaxStreem?', 'TaxStreem is tax and accounting software for businesses and individuals in Nigeria. It keeps your books, issues your invoices, manages your inventory, and prepares and files your VAT, WHT, CIT and PIT returns.'],
   ['Which taxes does TaxStreem file?', 'Value Added Tax (VAT), Withholding Tax (WHT), Companies Income Tax (CIT) and Personal Income Tax (PIT). VAT, WHT and CIT are filed with the Nigeria Revenue Service. PIT is filed with the Lagos State Internal Revenue Service (LIRS).'],
   ['How does TaxStreem help me recover input VAT?', 'It reads the VAT on each supplier invoice, checks the supplier’s Tax ID, and claims the VAT in the month the invoice is paid. The VAT return shows every invoice behind the figure.'],
   ['Can TaxStreem file where the tax portal has no API?', 'Yes. TaxStreem’s filing agent completes the return on the portal, submits it and saves the acknowledgement.'],

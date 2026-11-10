@@ -19,7 +19,7 @@ export function Footer() {
       <div className="wrap">
         <div className="ftr-top">
           <img src={asset('/brand/taxstreem-logo-white.svg')} alt="TaxStreem" width={140} height={26} />
-          <p>Tax and bookkeeping infrastructure for African businesses. Live in Nigeria.</p>
+          <p>Tax and accounting infrastructure for African businesses. Live in Nigeria.</p>
         </div>
         <div className="ftr-news" id="newsletter"><Newsletter id="news-footer" /></div>
         <div className="ftr-cols">

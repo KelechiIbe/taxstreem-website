@@ -11,6 +11,8 @@ import { Pricing } from '../../components/Pricing'
 import { ContactForm } from '../../components/ContactForm'
 import { LiveProduct } from '../../components/LiveProduct'
 import { VatClaimFilm, WhtCreditFilm, StatementsFilm, ReturnsFilm, CloseFilm, ReconFilm } from '../../demos/SolutionFilms'
+import { LivePortal } from '../../components/LivePortal'
+import { PortalTour } from '../../demos/PortalTour'
 import { Integrations } from '../../components/Integrations'
 import { Newsletter } from '../../components/Newsletter'
 import { HeroFilm } from '../../demos/HeroFilm'
@@ -54,8 +56,8 @@ export function generateMetadata({ params }: { params: { slug: string[] } }): Me
 
 const FILMS: Record<string, React.ReactNode> = { review: <ReviewFilm />, file: <FileFilm />, connect: <ConnectFilm />, einvoice: <EInvoiceFilm />, inventory: <InventoryFilm />, pit: <PitFilm />, portal: <PortalFilm /> }
 const ALT = ['', 'Two colleagues reviewing figures on a tablet', 'A pharmacist serving a customer', 'A freelancer working on a laptop at home', 'An accountant explaining a report to a client', '', 'A business owner reading a message on his phone', 'A small team gathered around a laptop']
-const SOL: Record<string, React.ReactNode> = { '/solutions/input-vat-recovery': <VatClaimFilm />, '/solutions/tax-refunds': <WhtCreditFilm />, '/solutions/clean-books': <StatementsFilm />, '/solutions/tax-filing': <ReturnsFilm />, '/solutions/finance-teams': <CloseFilm />, '/solutions/reconciliation': <ReconFilm /> }
-const RAIL: Record<string, React.ReactNode> = { '/service-businesses': <ReviewFilm />, '/personal-income-tax': <ConnectFilm />, '/tax-professionals': <FileFilm /> }
+const SOL: Record<string, React.ReactNode> = { '/solutions/input-vat-recovery': <VatClaimFilm />, '/solutions/tax-refunds': <WhtCreditFilm />, '/solutions/clean-books': <StatementsFilm />, '/solutions/tax-filing': <ReturnsFilm />, '/solutions/finance-teams': <CloseFilm />, '/solutions/reconciliation': <ReconFilm />, '/tax-professionals': <PortalTour /> }
+const RAIL: Record<string, React.ReactNode> = { '/service-businesses': <ReviewFilm />, '/personal-income-tax': <ConnectFilm />, '/tax-professionals': <img className="rail-photo" src={asset('/photos/photo-4.jpg')} alt="An accountant explaining a report to a client" loading="lazy" /> }
 const IND_PHOTOS = ['A shop attendant carrying a basket of produce in a supermarket aisle', 'Two waiters laying a restaurant table', 'A worker checking metal profiles on a factory floor', 'A delivery driver moving cartons from a van', 'An adviser going through a document with two clients', 'A doctor typing notes at a clinic desk']
 const LOGO: Record<string, string> = { Mono: 'mono', Paystack: 'paystack', Flutterwave: 'flutterwave', Moniepoint: 'moniepoint', Bujeti: 'bujeti', QuickBooks: 'quickbooks', Xero: 'xero', 'Zoho Books': 'zoho-books', NRS: 'nrs', LIRS: 'lirs', 'NRS Merchant Buyer Solution': 'nrs', 'Corporate Affairs Commission (CAC)': 'cac', WhatsApp: 'whatsapp', Grey: 'grey', Upwork: 'upwork', Bumpa: 'bumpa' }
 
@@ -106,8 +108,9 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           {sol && <div className="wrap rise" style={{ ['--d' as string]: '300ms' }}><div className="hero-stage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Flow /><div className="hero-film">{sol}<i className="beam" aria-hidden /></div></div></div>}
         </section>
 
+        {def.path === '/tax-professionals' && <section className="sec sec-dark"><Aurora tone="dark" /><div className="wrap"><Reveal className="sec-head" kind="blur"><h2>Try the portal here. Run a practice for a minute.</h2></Reveal><Reveal><LivePortal /></Reveal></div></section>}
         {v === 'app' && <section className="sec sec-dark"><Aurora tone="dark" /><div className="wrap"><Reveal className="sec-head" kind="blur"><h2>Try it here. Click through a month.</h2></Reveal><Reveal><LiveProduct /></Reveal></div></section>}
-        {v === 'hub' && <section className="hub-sec"><div className="wrap"><Reveal kind="wipe" className="hub-stage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Hub /></Reveal></div></section>}
+        {v === 'hub' && <section className="hub-sec"><div className="wrap"><Reveal kind="wipe" className="hub-stage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Hub dark /></Reveal></div></section>}
 
         {def.kind === 'pricing' && tables[0] && <section className="sec pg-first"><div className="wrap"><Pricing table={tables[0]} /></div></section>}
         {def.kind === 'modules' && tables[0] && (
@@ -119,10 +122,12 @@ export default function Page({ params }: { params: { slug: string[] } }) {
         )}
         {def.kind === 'integrations' && tables[0] && (
           <section className="chap ix-sec"><div className="wrap">
-            <Integrations
-              rows={tables[0].rows.map((r) => { const soon = r[3].x !== 'Live'; return { cat: r[0].x, names: soon ? ['Grey', 'Upwork', 'Bumpa', 'Countev'] : r[1].x.split(', '), line: soon ? 'Earnings and store sales pulled in for your books and your annual return.' : r[2].x, soon } })}
-              upload={(rest.find((b) => b.k === 'p' && /^Also on the page/.test((b as Txt).x)) as Txt | undefined)?.r.slice(2).map((r) => r.t).join('').trim() || 'PDF and CSV statements read into transactions, including scanned ones.'}
-            />
+            <Integrations rows={[
+              ...tables[0].rows.map((r) => r[3].x === 'Live'
+                ? { cat: r[0].x, line: r[2].x, items: r[1].x.split(', ').map((name) => ({ name })) }
+                : { cat: r[0].x, line: r[2].x, items: [{ name: 'Countev' }, ...['Grey', 'Upwork', 'Bumpa'].map((name) => ({ name, soon: true }))] }),
+              { cat: 'Bank statement upload', line: (rest.find((b) => b.k === 'p' && /^Also on the page/.test((b as Txt).x)) as Txt | undefined)?.r.slice(2).map((r) => r.t).join('').trim() || 'PDF and CSV statements read into transactions, including scanned ones.', items: [{ name: 'PDF, CSV and scanned statements' }] },
+            ]} />
           </div></section>
         )}
         {def.kind === 'find' && tables[0] && (
@@ -206,7 +211,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
             </>
           )
         })()}
-        {!about && !['glossary', 'contact', 'industries', 'cms'].includes(def.kind ?? '') && body.length > 0 && <Chapters blocks={body} rail={RAIL[def.path]} dark={v !== 'app' && !def.kind} />}
+        {!about && !['glossary', 'contact', 'industries', 'cms'].includes(def.kind ?? '') && body.length > 0 && <Chapters blocks={body} rail={RAIL[def.path]} dark={v !== 'app' && def.path !== '/tax-professionals' && !def.kind} />}
 
         <section className="closing">
           <img className="closing-photo" src={asset('/photos/photo-7.jpg')} alt="" loading="lazy" />

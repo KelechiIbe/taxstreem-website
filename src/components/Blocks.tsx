@@ -116,6 +116,7 @@ export function Blocks({ blocks }: { blocks: Block[] }) {
 
 type Txt = Extract<Block, { k: 'p' | 'h1' | 'h2' | 'h3' }>
 type Chap = { head?: string; blocks: Block[] }
+const isPhoto = (n: React.ReactNode) => typeof n === 'object' && n !== null && 'type' in n && (n as { type: unknown }).type === 'img'
 const FEAT = 'Section|Heading|Copy'
 const shown = (b: Block) => b.k === 'table' || b.k === 'ul' || b.k === 'ol' || !(SKIP.test((b as Txt).x) || /^Closing:/.test((b as Txt).x))
 
@@ -161,7 +162,7 @@ export function Chapters({ blocks, rail, dark = true }: { blocks: Block[]; rail?
               {(c.head || film) && (
                 <div className="chap-rail">
                   {c.head && <Reveal kind="blur"><h2>{c.head}</h2></Reveal>}
-                  {film && <Reveal kind="wipe" className="rail-film"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden />{rail}</Reveal>}
+                  {film && (isPhoto(rail) ? <Reveal kind="wipe" className="rail-pic">{rail}</Reveal> : <Reveal kind="wipe" className="rail-film"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden />{rail}</Reveal>)}
                 </div>
               )}
               <div className="chap-body"><Blocks blocks={c.blocks} /></div>

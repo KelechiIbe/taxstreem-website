@@ -179,7 +179,7 @@ export default function Home() {
             </Reveal>
             <Reveal className="duo-card duo-dark" delay={100}>
               <h2>Offer tax to your customers without building it.</h2>
-              <p>Tax computation, e-invoicing, inventory management, bookkeeping and filing are available through one API. Your customers stay in your product. TaxStreem does the tax work behind it.</p>
+              <p>Tax computation, e-invoicing, inventory management, accounting and filing are available through one API. Your customers stay in your product. TaxStreem does the tax work behind it.</p>
               <pre aria-label="Example API call"><code>{`POST /v1/vat/compute\n{ "amount": 850000, "inclusive": false }\n\n200 OK\n{ "vat": 63750, "rate": 0.075, "total": 913750 }`}</code></pre>
               <div className="cta-row">
                 <a className="more" href={link('/embedded-infrastructure')}>See embedded infrastructure <ArrowRight size={14} /></a>

@@ -59,3 +59,6 @@ for _b in _c['Partners']:
         _cell = lambda t: {'x': t, 'r': [{'t': t, 'b': False}]}
         _b['rows'].append([_cell('Gold'), _cell('25 or more'), _cell('18%'), _cell("6 months from each business's first payment")])
 json.dump(_c, open(_p, 'w'), ensure_ascii=False)
+
+# Also after approval (Kelechi, 10 Nov): the site says accounting for bookkeeping throughout.
+_t = open(_p, encoding='utf8').read().replace('Bookkeeping', 'Accounting').replace('bookkeeping', 'accounting'); open(_p, 'w', encoding='utf8').write(_t)
