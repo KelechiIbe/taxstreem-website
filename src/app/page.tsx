@@ -224,7 +224,6 @@ export default function Home() {
         <section className="closing">
           <img className="closing-photo" src={asset('/photos/photo-7.jpg')} alt="" loading="lazy" />
           <div className="closing-shade" aria-hidden />
-          <Flow />
           <div className="wrap">
             <Reveal kind="blur">
               <h2>Month-end is coming. Have it done.</h2>

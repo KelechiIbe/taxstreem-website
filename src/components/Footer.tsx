@@ -4,13 +4,11 @@ import { asset } from '../lib/asset'
 const col = (label: string) => NAV.find((n) => n.label === label)!.groups!.flatMap((g) => g.links)
 const COLS: [string, { label: string; href: string; external?: boolean }[]][] = [
   ['Products', [...col('Products'), { label: 'Pricing', href: '/pricing' }]],
-  ['Solutions', col('Solutions')],
-  ['Developers', [...col('Developers'), { label: 'The modules: Numens, Prism, Atlas, Flux, Martina', href: '/modules' }]],
-  ['Resources', col('Resources').filter((l) => l.label !== 'All Resources' && l.label !== 'Newsroom')],
+  ['Developers', [...col('Developers'), { label: 'Modules', href: '/modules' }]],
+  ['Resources', col('Resources').filter((l) => !['All Resources', 'Newsroom', 'Demos', 'Reports & Analysis'].includes(l.label))],
   ['Company', col('Company')],
   ['Legal and trust', [
-    { label: 'Trust Centre', href: '/security' }, { label: 'Privacy', href: LINKS.privacy }, { label: 'Terms', href: LINKS.terms },
-    { label: 'Service level agreement', href: '/sla' }, { label: 'Responsible Disclosure', href: '/security#disclosure' },
+    { label: 'Trust Centre', href: '/security' }, { label: 'Privacy', href: LINKS.privacy }, { label: 'Terms', href: LINKS.terms }, { label: 'Service level agreement', href: '/sla' },
   ]],
 ]
 
