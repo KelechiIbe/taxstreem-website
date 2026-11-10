@@ -1,22 +1,34 @@
 #!/bin/sh
 # Puts the TaxStreem website on Cloud Run as its own service. It does not touch the current website or the domain.
 #
-#   sh deploy.sh                       deploy to the production project
-#   PROJECT=my-project sh deploy.sh    deploy somewhere else
+#   sh deploy.sh                       deploy to the project Cloud Shell is set to (it asks first)
+#   PROJECT=my-project sh deploy.sh    deploy to a named project
 #   SERVICE=…  REGION=…                other service name or region
+#   YES=1                              skip the question
 set -e
 cd "$(dirname "$0")"
 SERVICE="${SERVICE:-taxstreem-web-v2}"
 REGION="${REGION:-us-central1}"
 MARK="Tax Compliance Finally on"          # words only the new home page carries
 
-# 1. Which project. Default: the one the production CMS and admin portal live in.
-if [ -z "$PROJECT" ]; then
-  PROJECT=$(gcloud projects list --filter="projectNumber=61341992308" --format="value(projectId)" 2>/dev/null | head -1)
-  [ -n "$PROJECT" ] || PROJECT=$(gcloud config get-value project 2>/dev/null)
+# 1. Which project. The one Cloud Shell is set to, unless PROJECT says otherwise. Nothing is assumed.
+[ -n "$PROJECT" ] || PROJECT=$(gcloud config get-value project 2>/dev/null)
+if [ -z "$PROJECT" ] || [ "$PROJECT" = "(unset)" ]; then
+  echo "Stop: no project is selected. Run it as  PROJECT=your-project-id sh deploy.sh"
+  exit 1
 fi
-[ -n "$PROJECT" ] || { echo "Stop: no project. Run it as  PROJECT=your-project-id sh deploy.sh"; exit 1; }
-echo "Project: $PROJECT   Service: $SERVICE   Region: $REGION"
+NUMBER=$(gcloud projects describe "$PROJECT" --format="value(projectNumber)" 2>/dev/null || true)
+case "$NUMBER" in
+  61341992308)  KIND="PRODUCTION";;
+  356183719853) KIND="staging";;
+  *)            KIND="neither the known staging nor production project";;
+esac
+echo "Project: $PROJECT ($KIND)   Service: $SERVICE   Region: $REGION"
+if [ -z "$YES" ] && [ -t 0 ]; then
+  printf "Publish the website there? [y/N] "
+  read ANSWER
+  case "$ANSWER" in y|Y|yes|YES) ;; *) echo "Stopped. Nothing was changed."; exit 1;; esac
+fi
 
 # 2. Switch on what Cloud Run needs to build from source. Safe to repeat.
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com --project "$PROJECT" --quiet

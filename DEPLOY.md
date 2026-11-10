@@ -9,7 +9,7 @@ current website, its service or the `taxstreem.com` domain. Moving the domain is
 | | |
 | --- | --- |
 | Service | `taxstreem-web-v2` |
-| Project | the production project (number `61341992308`, the one the CMS backend and admin portal run in) |
+| Project | whichever project Cloud Shell is set to. The script names it, says whether it is staging (`356183719853`) or production (`61341992308`), and asks before going ahead |
 | Region | `us-central1` |
 | Access | public, no sign-in |
 | Size | 512 MB, 1 CPU, 0 to 6 instances, port 8080 |
@@ -25,7 +25,8 @@ Service Account User (`roles/iam.serviceAccountUser`) on the Cloud Run service i
 
 ## Steps
 
-1. Open https://console.cloud.google.com, pick the production project in the project menu at the top, then
+1. Open https://console.cloud.google.com, pick the project to publish to (staging for a rehearsal) in the
+   project menu at the top, then
    click the Cloud Shell button (the `>_` icon, top right). A terminal opens at the bottom of the page.
 
 2. Get the code:
@@ -43,7 +44,8 @@ Service Account User (`roles/iam.serviceAccountUser`) on the Cloud Run service i
 
    If Cloud Shell asks you to authorise, click Authorise. The script then:
 
-   - picks the production project and switches on the Cloud Run, Cloud Build and Artifact Registry APIs;
+   - shows the project it is about to publish to and waits for `y`;
+   - switches on the Cloud Run, Cloud Build and Artifact Registry APIs in that project;
    - refuses to continue if a service called `taxstreem-web-v2` already exists and is something else;
    - finds the current website's own `.run.app` address among the project's services and saves it as
      `LEGACY_SITE_URL` in `.env.production` (the reason is in the next section);
@@ -82,12 +84,25 @@ and run the script again:
 
 ```sh
 gcloud projects add-iam-policy-binding PROJECT_ID \
-  --member=serviceAccount:61341992308-compute@developer.gserviceaccount.com --role=roles/run.builder
+  --member=serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com --role=roles/run.builder
 ```
 
 **"a service named taxstreem-web-v2 already exists"**. Pick another name: `SERVICE=another-name sh deploy.sh`.
 
 **A different project or region**: `PROJECT=project-id REGION=europe-west1 sh deploy.sh`.
+
+## On staging
+
+The three settings in `.env.production` are addresses, so a staging copy can read from either environment.
+Decide each one before running the script:
+
+| Setting | As committed | On staging |
+| --- | --- | --- |
+| `CMS_URL` | the production CMS | Leave it. The CMS is only read, and the staging CMS (`taxstreem-cms-backend-356183719853…`) has no articles, so Resources and Newsroom would be empty. |
+| `NEXT_PUBLIC_API_URL` | the production core API | Change it to the staging core API if there is one, so test newsletter and contact entries stay out of the production admin portal. Either way the API has to allow the new `.run.app` origin before the forms send. |
+| `LEGACY_SITE_URL` | empty, found by the script | The script looks for a copy of the current website in the staging project. If there is none it stops; paste the production website service's `.run.app` address instead. Those pages are only read. |
+
+Going to production later is the same command in the production project. Nothing carries over from staging.
 
 ## What still comes from the current website
 

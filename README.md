@@ -8,8 +8,8 @@ The public website for www.taxstreem.com: Next.js 14 (app router), run as a smal
 sh deploy.sh
 ```
 
-One command, run from Google Cloud Shell in the production project. It deploys the `taxstreem-web-v2` service
-in `us-central1` and prints its `.run.app` address. It does not touch the current website or the domain.
+One command, run from Google Cloud Shell in the project to publish to (staging or production; it asks first).
+It deploys the `taxstreem-web-v2` service in `us-central1` and prints its `.run.app` address. It does not touch the current website or the domain.
 Full steps, what to check and what to do if it stops: [DEPLOY.md](DEPLOY.md).
 
 ## Settings (`.env.production`, read at build time, no secrets)
