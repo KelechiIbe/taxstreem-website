@@ -1,5 +1,5 @@
 /** Animated grounds: drifting colour, ruled lines with travelling light, flowing curves. Pure CSS and SVG. */
-export function Aurora({ tone = 'light' }: { tone?: 'light' | 'dark' | 'blue' }) {
+export function Aurora({ tone = 'light' }: { tone?: 'light' | 'dark' | 'blue' | 'plain' }) {
   return (
     <div className="bg" data-tone={tone} aria-hidden>
       <i className="blob b1" /><i className="blob b2" /><i className="blob b3" />

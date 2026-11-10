@@ -7,7 +7,7 @@ import { LiveProduct } from '../components/LiveProduct'
 import { HeroFilm } from '../demos/HeroFilm'
 import { MartinaChat } from '../demos/MartinaChat'
 import { ConnectFilm, ReviewFilm, FileFilm, EInvoiceFilm, InventoryFilm } from '../demos/MiniFilms'
-import { Aurora, Grain } from '../components/Backdrop'
+import { Aurora, Flow, Grain } from '../components/Backdrop'
 import { Photo } from '../components/Photo'
 import { LINKS, RESULTS, PRODUCTS, STEPS, FAQ, PARTNER_LOGOS } from '../content/site'
 import { asset } from '../lib/asset'
@@ -21,6 +21,7 @@ const PHOTO_BRIEFS = [
   'A freelancer working alone on a laptop at home or in a caf\u00e9. Landscape.',
   'An accountant reviewing papers with a client across a desk. Landscape.',
 ]
+const PHOTO_ALT = ['Two colleagues reviewing figures on a tablet in an office', 'A pharmacist serving a customer at the counter', 'A freelancer working on a laptop at home', 'An accountant explaining a report to a client']
 const FILMS = [<ConnectFilm key="c" />, <ReviewFilm key="r" />, <FileFilm key="f" />]
 const PRESS = ['Punch', 'ThisDay', 'Techparley', 'Technaija', 'Innovation Village', 'The CFO Magazine']
 
@@ -38,10 +39,10 @@ export default function Home() {
       <Header />
       <main>
         <section className="hero">
-          <Aurora />
+          <Aurora tone="plain" />
           <div className="wrap hero-in">
             <p className="kicker rise" style={{ ['--d' as string]: '0ms' }}>Tax and bookkeeping for African businesses. Live in Nigeria.</p>
-            <h1 className="rise" style={{ ['--d' as string]: '80ms' }}>Do your books once.<br />Your taxes follow.</h1>
+            <h1 className="rise" style={{ ['--d' as string]: '80ms' }}>Tax Compliance<br />Finally on <span className="mark">Autopilot<svg viewBox="0 0 300 18" preserveAspectRatio="none" aria-hidden><path d="M3 12 C 60 3, 120 3, 170 9 S 260 14, 297 5" /></svg></span></h1>
             <p className="lede rise" style={{ ['--d' as string]: '160ms' }}>
               TaxStreem keeps your books from your bank, sales and supplier invoices. Then it prepares and files your VAT, WHT, CIT and PIT returns with the Nigeria Revenue Service (NRS) and your State Internal Revenue Service. You check and approve.
             </p>
@@ -51,8 +52,11 @@ export default function Home() {
             </div>
             <p className="fine rise" style={{ ['--d' as string]: '300ms' }}>Set up in a day. Cancel any time.</p>
           </div>
-          <div className="wrap hero-film rise" style={{ ['--d' as string]: '380ms' }}>
-            <HeroFilm />
+          <div className="wrap rise" style={{ ['--d' as string]: '380ms' }}>
+            <div className="hero-stage">
+              <i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Flow />
+              <div className="hero-film"><HeroFilm /></div>
+            </div>
           </div>
         </section>
 
@@ -99,7 +103,7 @@ export default function Home() {
               {PRODUCTS.map((p, i) => (
                 <Reveal as="li" key={p.name} delay={i * 70} className="product">
                   <a href={p.href}>
-                    <Photo n={i + 1} brief={PHOTO_BRIEFS[i]} ratio="4 / 3" />
+                    <Photo n={i + 1} brief={PHOTO_BRIEFS[i]} ratio="4 / 3" src={`/photos/photo-${i + 1}.jpg`} alt={PHOTO_ALT[i]} />
                     <span className="product-n">0{i + 1}</span>
                     <h3>{p.name}</h3>
                     <p className="product-who">{p.who}</p>
@@ -151,7 +155,7 @@ export default function Home() {
               <a className="btn btn-ghost" href="/countev">See Countev <ArrowRight size={16} /></a>
             </Reveal>
             <Reveal className="stack" delay={120}>
-              <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" />
+              <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" src="/photos/photo-5.jpg" alt="A shopper checking a product against her phone beside a shelf" />
               <div className="film"><InventoryFilm /></div>
             </Reveal>
           </div>
@@ -166,7 +170,7 @@ export default function Home() {
               <a className="btn btn-ghost" href="/martina">Meet Martina <ArrowRight size={16} /></a>
             </Reveal>
             <Reveal className="stack-phone" delay={120}>
-              <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" />
+              <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" src="/photos/photo-6.jpg" alt="A business owner reading a message on his phone" />
               <MartinaChat />
             </Reveal>
           </div>
@@ -244,7 +248,7 @@ export default function Home() {
                 <a className="btn btn-outline btn-lg" href="/contact">Talk to us</a>
               </div>
             </Reveal>
-            <Reveal delay={120}><Photo n={7} brief="A small team at work in a Lagos office, relaxed, laptops open. Landscape." ratio="4 / 3" /></Reveal>
+            <Reveal delay={120}><Photo n={7} brief="" ratio="4 / 3" src="/photos/photo-7.jpg" alt="A small team gathered around a laptop" /></Reveal>
           </div>
         </section>
       </main>
