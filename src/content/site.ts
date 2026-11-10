@@ -1,9 +1,11 @@
+// In the preview these open the live site. On the live site they are ordinary pages at the same address.
+const SITE = process.env.NEXT_PUBLIC_FLAT === '1' ? 'https://www.taxstreem.com' : ''
 export const LINKS = {
-  start: 'https://www.taxstreem.com/get-invite',
+  start: `${SITE}/get-invite`,
   login: 'https://app.taxstreem.com',
   dev: 'https://developer-portal.taxstreem.com/',
-  privacy: 'https://www.taxstreem.com/privacy',
-  terms: 'https://www.taxstreem.com/terms',
+  privacy: `${SITE}/privacy`,
+  terms: `${SITE}/terms`,
 }
 
 export type NavLink = { label: string; line: string; href: string; icon?: string; tag?: string; external?: boolean }

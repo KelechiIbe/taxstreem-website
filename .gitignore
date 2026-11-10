@@ -5,3 +5,6 @@ out
 preview
 shots
 preview-files.json
+public/cms
+screen-notes.md
+.env*.local

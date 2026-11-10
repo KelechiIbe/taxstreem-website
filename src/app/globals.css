@@ -1,6 +1,6 @@
 :root {
-  --blue: #0072f5; --blue-600: #005ac2; --blue-50: #f0f7ff; --blue-200: #b9d4ff; --blue-400: #3e88ff;
-  --ink: #000a14; --ink-2: #1b2636; --mute: #5b6676; --faint: #8a94a3; --line: #e6eaf0; --tint: #f6f8fb; --white: #fff;
+  --blue: #006be6; --blue-600: #005ac2; --blue-50: #f0f7ff; --blue-200: #b9d4ff; --blue-400: #3e88ff;
+  --ink: #000a14; --ink-2: #1b2636; --mute: #5b6676; --faint: #667182; --line: #e6eaf0; --tint: #f6f8fb; --white: #fff;
   --font-sans: 'Helvetica Neue', 'Inter', Helvetica, Arial, sans-serif; --font-display: 'Helvetica Neue', 'Inter', Helvetica, Arial, sans-serif; --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --r: 16px; --ease: cubic-bezier(.2, .7, .2, 1); --hdr: 108px;
 }
@@ -476,7 +476,7 @@ button.ap-primary:hover { background: var(--blue-600); } .ap-primary:disabled { 
 .dt th, .dt td { text-align: left; padding: 18px 20px 18px 0; border-bottom: 1px solid var(--line); vertical-align: top; } .dt thead th { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding: 12px 20px 12px 0; } .dt tbody th { font-weight: 600; width: 26%; } .dt td { color: var(--ink-2); }
 /* pricing */
 .pr-toggle { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--tint); border: 1px solid var(--line); margin: 0 auto 36px; } .pr { display: flex; flex-direction: column; }
-.pr-toggle button { padding: 10px 22px; border-radius: 999px; font-weight: 600; font-size: 15px; color: var(--mute); transition: all .25s; min-height: 44px; } .pr-toggle button[aria-pressed='true'] { background: var(--ink); color: #fff; } .pr-toggle em { font-style: normal; font-size: 12px; color: #16a34a; margin-left: 4px; } .pr-toggle button[aria-pressed='true'] em { color: #86efac; }
+.pr-toggle button { padding: 10px 22px; border-radius: 999px; font-weight: 600; font-size: 15px; color: var(--mute); transition: all .25s; min-height: 44px; } .pr-toggle button[aria-pressed='true'] { background: var(--ink); color: #fff; } .pr-toggle em { font-style: normal; font-size: 12px; color: #15803d; margin-left: 4px; } .pr-toggle button[aria-pressed='true'] em { color: #86efac; }
 .pr-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
 .pr-plans > li { border: 1px solid var(--line); border-radius: 24px; padding: 30px; display: flex; flex-direction: column; gap: 16px; background: #fff; position: relative; }
 .pr-plans > li[data-hot] { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 50px 90px -50px rgba(0,114,245,.8); }
@@ -785,3 +785,6 @@ button.ap-primary:hover { background: var(--blue-600); } .ap-primary:disabled { 
 .cform-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .cform .btn:disabled { opacity: .7; cursor: progress; } .cform-err { color: #b91c1c !important; }
 .cform-done { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; animation: apIn .4s var(--ease); } .cform-done > span { width: 48px; height: 48px; border-radius: 50%; background: #dcfce7; color: #15803d; display: grid; place-items: center; } .cform-done h2 { font-size: 30px; max-width: none; } .cform-done p { color: var(--mute); } .cform-done em { font-style: normal; color: var(--faint); }
+
+/* module cards: the card inside each list item is the control */
+.mods li { padding: 0 !important; display: block !important; } .mods-card { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 28px; border-radius: inherit; cursor: pointer; } .mods-card:focus-visible { outline: 2px solid var(--blue); outline-offset: -4px; }

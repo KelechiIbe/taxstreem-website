@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+preview
+shots
+public/cms
+.git
+*.tsbuildinfo
+preview-files.json
+build.sh
