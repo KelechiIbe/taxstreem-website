@@ -6,12 +6,22 @@ import { Faq } from '../components/Faq'
 import { LiveProduct } from '../components/LiveProduct'
 import { HeroFilm } from '../demos/HeroFilm'
 import { MartinaChat } from '../demos/MartinaChat'
+import { ConnectFilm, ReviewFilm, FileFilm, EInvoiceFilm, InventoryFilm } from '../demos/MiniFilms'
+import { Aurora, Grain } from '../components/Backdrop'
+import { Photo } from '../components/Photo'
 import { LINKS, RESULTS, PRODUCTS, STEPS, FAQ, PARTNER_LOGOS } from '../content/site'
 import { asset } from '../lib/asset'
 
 const RICON: Record<string, React.ReactNode> = {
   vat: <ReceiptText />, owed: <HandCoins />, books: <Landmark />, file: <FileCheck2 />, team: <Timer />, recon: <Scale />,
 }
+const PHOTO_BRIEFS = [
+  'Two or three professionals in a small agency or consulting office. Landscape.',
+  'A shopkeeper or pharmacist serving a walk-in customer at the counter. Landscape.',
+  'A freelancer working alone on a laptop at home or in a caf\u00e9. Landscape.',
+  'An accountant reviewing papers with a client across a desk. Landscape.',
+]
+const FILMS = [<ConnectFilm key="c" />, <ReviewFilm key="r" />, <FileFilm key="f" />]
 const PRESS = ['Punch', 'ThisDay', 'Techparley', 'Technaija', 'Innovation Village', 'The CFO Magazine']
 
 const jsonLd = [
@@ -24,10 +34,11 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Grain />
       <Header />
       <main>
         <section className="hero">
-          <div className="hero-glow" aria-hidden />
+          <Aurora />
           <div className="wrap hero-in">
             <p className="kicker rise" style={{ ['--d' as string]: '0ms' }}>Tax and bookkeeping for African businesses. Live in Nigeria.</p>
             <h1 className="rise" style={{ ['--d' as string]: '80ms' }}>Do your books once.<br />Your taxes follow.</h1>
@@ -88,6 +99,7 @@ export default function Home() {
               {PRODUCTS.map((p, i) => (
                 <Reveal as="li" key={p.name} delay={i * 70} className="product">
                   <a href={p.href}>
+                    <Photo n={i + 1} brief={PHOTO_BRIEFS[i]} ratio="4 / 3" />
                     <span className="product-n">0{i + 1}</span>
                     <h3>{p.name}</h3>
                     <p className="product-who">{p.who}</p>
@@ -109,6 +121,7 @@ export default function Home() {
             <ol className="steps">
               {STEPS.map((s, i) => (
                 <Reveal as="li" key={s.title} delay={i * 90}>
+                  <div className="step-film">{FILMS[i]}</div>
                   <span className="step-n">{i + 1}</span>
                   <h3>{s.title}</h3>
                   <p>{s.copy}</p>
@@ -119,6 +132,7 @@ export default function Home() {
         </section>
 
         <section className="sec sec-dark" id="try">
+          <Aurora tone="dark" />
           <div className="wrap">
             <Reveal className="sec-head">
               <p className="kicker">Try it here</p>
@@ -136,18 +150,9 @@ export default function Home() {
               <p className="lede">AI agents track what you hold in every branch, what it is worth, what is selling and what is going missing. Each morning they pick the items most likely to have lost money and ask someone to count them.</p>
               <a className="btn btn-ghost" href="/countev">See Countev <ArrowRight size={16} /></a>
             </Reveal>
-            <Reveal className="leak" delay={120}>
-              <div className="leak-top">
-                <span>Stock loss, last 30 days</span>
-                <b>Leaking ₦184,000 a month</b>
-              </div>
-              <div className="leak-head">Count these next</div>
-              <ul>
-                <li><b>Receipt paper rolls</b><span>Sold 40, stock fell by 52</span><em>Counting</em></li>
-                <li><b>50kg rice</b><span>Two price changes this quarter</span></li>
-                <li><b>Phone chargers</b><span>Not counted for 21 days</span></li>
-                <li><b>Printer ink, black</b><span>Returns higher than usual</span></li>
-              </ul>
+            <Reveal className="stack" delay={120}>
+              <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" />
+              <div className="film"><InventoryFilm /></div>
             </Reveal>
           </div>
         </section>
@@ -160,7 +165,10 @@ export default function Home() {
               <p className="lede">Martina is the AI agent inside TaxStreem. She works on WhatsApp and by phone, in English, Pidgin, Yoruba, Hausa or Igbo. She tells you when the margin on a product starts to shrink and shows you where money or stock is leaking. She keeps the list of customers who owe you, with how long each has owed, then reminds them and phones the ones who stay silent. Ask her anything about your books and she answers from your own figures. Your VAT return still goes in on time.</p>
               <a className="btn btn-ghost" href="/martina">Meet Martina <ArrowRight size={16} /></a>
             </Reveal>
-            <Reveal className="phone-slot" delay={120}><MartinaChat /></Reveal>
+            <Reveal className="stack-phone" delay={120}>
+              <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" />
+              <MartinaChat />
+            </Reveal>
           </div>
         </section>
 
@@ -170,6 +178,7 @@ export default function Home() {
               <p className="kicker">E-invoicing</p>
               <h2>Ready for NRS e-invoicing before it reaches you.</h2>
               <p>Nigeria is moving every business to electronic invoices validated by the NRS. TaxStreem sends each invoice to the NRS, returns it with its Invoice Reference Number and QR code, and delivers it to your customer. TaxStreem&rsquo;s accreditation as a System Integrator and Access Point Provider is in progress.</p>
+              <div className="duo-film"><EInvoiceFilm /></div>
               <a className="more" href="/e-invoicing">See how e-invoicing works <ArrowRight size={14} /></a>
             </Reveal>
             <Reveal className="duo-card duo-dark" delay={100}>
@@ -225,7 +234,8 @@ export default function Home() {
         </section>
 
         <section className="closing">
-          <div className="wrap">
+          <Aurora tone="blue" />
+          <div className="wrap closing-in">
             <Reveal>
               <h2>Month-end is coming. Have it done.</h2>
               <p>Set up takes a day. Your first reconciled month takes about a week.</p>
@@ -234,6 +244,7 @@ export default function Home() {
                 <a className="btn btn-outline btn-lg" href="/contact">Talk to us</a>
               </div>
             </Reveal>
+            <Reveal delay={120}><Photo n={7} brief="A small team at work in a Lagos office, relaxed, laptops open. Landscape." ratio="4 / 3" /></Reveal>
           </div>
         </section>
       </main>
