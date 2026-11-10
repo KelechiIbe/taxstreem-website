@@ -208,6 +208,7 @@ export function LiveProduct() {
           </div>
           <span className="ap-fab" aria-hidden><img src={asset('/modules/martina-blue.svg')} alt="" width={22} height={22} /></span>
         </div>
+        <i className="beam" aria-hidden />
       </div>
       <p className="live-caption">This is TaxStreem for a service business, with sample data. <span>Nothing you click here is sent anywhere.</span></p>
     </div>

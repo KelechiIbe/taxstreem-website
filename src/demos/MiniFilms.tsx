@@ -105,38 +105,43 @@ export function FileFilm() {
   )
 }
 
-/* 4. E-invoice: validated by the NRS, stamped, delivered */
-type E = { state: 'draft' | 'sending' | 'valid'; irn: string; qr: boolean; sent: boolean }
-const IRN = 'INV00412-7C4E91A2-20261110'
+/* 4. E-invoice: a real receipt signed by the NRS (RCT-000013, 5 Nov 2026) */
+type E = { state: 'sent' | 'sending' | 'signed'; irn: string; qr: boolean; sent: boolean }
+const IRN = 'RCT000013-4F78F6A7-20261105'
 export function EInvoiceFilm() {
-  const init: E = { state: 'draft', irn: '', qr: false, sent: false }
+  const init: E = { state: 'sent', irn: '', qr: false, sent: false }
   const script = async (a: Act<E>) => {
     await a.wait(900)
     await a.set({ state: 'sending' })
-    await a.wait(1300)
-    await a.set({ state: 'valid' })
-    await a.type('irn', IRN, { interval: 28 })
+    await a.wait(1400)
+    await a.set({ state: 'signed' })
+    await a.wait(350)
     await a.set({ qr: true })
+    await a.type('irn', IRN, { interval: 26 })
     await a.wait(900)
     await a.set({ sent: true })
-    await a.wait(3400)
+    await a.wait(3800)
     await a.set(init)
     await a.wait(400)
   }
   return (
-    <Stage<E> width={440} height={300} initial={init} poster={{ state: 'valid', irn: IRN, qr: true, sent: true }} script={script} {...common} className="mf mf-inv">
+    <Stage<E> width={460} height={376} initial={init} poster={{ state: 'signed', irn: IRN, qr: true, sent: true }} script={script} {...common} className="mf mf-inv">
       {(s) => (
         <>
           <div className="mf-paper">
-            <div className="mf-ph"><img src={asset('/brand/taxstreem-icon-blue.svg')} alt="" /><span><b>Tax invoice</b><i>Elysium Design Studio Ltd</i></span>
-              <States value={s.state} align="end" states={{ draft: <Badge>Draft</Badge>, sending: <Badge tone="accent" icon={<Spinner size={11} />}>Sending to NRS</Badge>, valid: <Badge tone="success" icon={<Check on size={12} />}>Validated by NRS</Badge> }} />
+            <div className="mf-ph"><span><b>Receipt RCT-000013</b><i>Walk-in customer · 05 Nov 2026</i></span>
+              <States value={s.state} align="end" states={{ sent: <Badge tone="success">Paid</Badge>, sending: <Badge tone="accent" icon={<Spinner size={11} />}>Sending to NRS</Badge>, signed: <Badge tone="success" icon={<Check on size={12} />}>Signed by NRS</Badge> }} />
             </div>
-            <div className="mf-pl"><span>Brand strategy retainer</span><b>{naira(850000)}</b></div>
-            <div className="mf-pl"><span>VAT at 7.5%</span><b>{naira(63750)}</b></div>
-            <div className="mf-pl mf-total"><span>Total</span><b>{naira(913750)}</b></div>
-            <div className="mf-irn"><span><em>Invoice Reference Number</em><code>{s.irn || ' '}</code></span><i className="mf-qr" data-show={s.qr || undefined} /></div>
+            <Collapse open={s.state === 'signed'} reveal="drop"><div className="mf-signed"><Check on size={14} /> Signed by NRS 05 Nov · 12:05. NRS knows it is paid.</div></Collapse>
+            <div className="mf-nrs">
+              <span className="mf-qr" data-show={s.qr || undefined}><img src={asset('/brand/nrs-signed-qr.png')} alt="QR code of an e-invoice signed by the NRS" /><i /></span>
+              <span className="mf-nrs-t"><b>NRS e-invoice, signed by NRS</b><code>IRN {s.irn || ' '}</code><em>Scan with NRS&rsquo;s MBS 360 app to check it.</em></span>
+            </div>
+            <div className="mf-pl"><span>Eva Water 75cl · 3 × {naira(250)}</span><b>{naira(750)}</b></div>
+            <div className="mf-pl"><span>VAT · zero-rated</span><b>{naira(0)}</b></div>
+            <div className="mf-pl mf-total"><span>Total paid</span><b>{naira(750)}</b></div>
           </div>
-          <div className="mf-toast" data-show={s.sent || undefined}><img src={asset('/partners/whatsapp.png')} alt="" /><span><b>Delivered to Adaeze Foods</b><i>with a payment link</i></span></div>
+          <div className="mf-toast" data-show={s.sent || undefined}><img src={asset('/partners/whatsapp.png')} alt="" /><span><b>Customer&rsquo;s copy sent</b><i>on WhatsApp, with the QR code</i></span></div>
         </>
       )}
     </Stage>

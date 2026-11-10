@@ -3,7 +3,7 @@ import os, re, shutil, json, sys
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 out, pv = os.path.join(root, 'out'), os.path.join(root, 'preview')
 shutil.rmtree(pv, ignore_errors=True); shutil.copytree(out, pv)
-for junk in ['404.html', 'index.txt', '404', 'team', '_next/static/media']:
+for junk in ['404.html', 'index.txt', '404', 'team', '_next/static/media', 'fonts/OFL-hanken-grotesk.txt']:
     p = os.path.join(pv, junk)
     shutil.rmtree(p) if os.path.isdir(p) else (os.path.exists(p) and os.remove(p))
 os.rename(os.path.join(pv, '_next'), os.path.join(pv, 'nx'))
