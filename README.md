@@ -4,19 +4,13 @@ The public website for www.taxstreem.com: Next.js 14 (app router), run as a smal
 
 ## Deploy
 
-1. Open `.env.production` and set `LEGACY_SITE_URL` to the Cloud Run address of the **current** website
-   (Cloud Run console, the existing website service, the URL at the top; it ends in `.run.app`).
-2. Run:
+```sh
+sh deploy.sh
+```
 
-   ```sh
-   sh deploy.sh
-   ```
-
-   It builds the container with Cloud Build and deploys the `taxstreem-website` service in `us-central1`.
-   Other project, service name or region: `PROJECT=… SERVICE=… REGION=… sh deploy.sh`.
-3. Open the new service's `.run.app` address and check it.
-4. Move the `www.taxstreem.com` (and `taxstreem.com`) domain mapping from the old service to the new one.
-   Keep the old service running: the new site still serves four of its pages (see below).
+One command, run from Google Cloud Shell in the production project. It deploys the `taxstreem-web-v2` service
+in `us-central1` and prints its `.run.app` address. It does not touch the current website or the domain.
+Full steps, what to check and what to do if it stops: [DEPLOY.md](DEPLOY.md).
 
 ## Settings (`.env.production`, read at build time, no secrets)
 

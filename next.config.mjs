@@ -20,6 +20,10 @@ const config = {
   poweredByHeader: false,
 }
 if (!preview) {
+  // On a bare Cloud Run address the site is a rehearsal copy: keep search engines away from it.
+  config.headers = async () => [
+    { source: '/:path*', has: [{ type: 'host', value: '.*\\.run\\.app' }], headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+  ]
   config.redirects = async () => MOVED.map(([source, destination]) => ({ source, destination, permanent: true }))
   config.rewrites = async () => ({
     beforeFiles: legacy ? [{ source: '/_next/image', destination: `${legacy}/_next/image` }] : [],
