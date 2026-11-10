@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Briefcase, Store, User, Scale, ChevronDown, ArrowUpRight, Menu, X, ArrowRight } from 'lucide-react'
 import { NAV, LINKS, type NavItem } from '../content/site'
-import { asset } from '../lib/asset'
+import { asset, link } from '../lib/asset'
 
 const ICONS: Record<string, React.ReactNode> = {
   briefcase: <Briefcase size={18} />, store: <Store size={18} />, user: <User size={18} />, scale: <Scale size={18} />,
@@ -30,14 +30,30 @@ export function Header() {
   const leave = () => { timer.current = setTimeout(() => setOpen(null), 140) }
   const current = NAV.find((n) => n.label === open && n.groups)
 
+  // On phones the announcement scrolls away and only the bar stays pinned.
+  const hdr = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const fit = () => {
+      const el = hdr.current; if (!el) return
+      const strip = el.querySelector<HTMLElement>('.strip'); const bar = el.querySelector<HTMLElement>('.hdr-bar')
+      const phone = window.innerWidth <= 820
+      el.style.top = phone && strip ? `-${strip.offsetHeight}px` : ''
+      if (phone && bar) document.documentElement.style.setProperty('--hdr', `${bar.offsetHeight}px`)
+      else document.documentElement.style.removeProperty('--hdr')
+    }
+    fit(); window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [])
+
   return (
-    <header className="hdr" data-scrolled={scrolled || undefined} data-open={current ? '' : undefined}>
-      <a className="strip" href="/e-invoicing">
+    <>
+    <header ref={hdr} className="hdr" data-scrolled={scrolled || undefined} data-open={current ? '' : undefined}>
+      <a className="strip" href={link('/e-invoicing')}>
         <span>E-invoicing is coming to every Nigerian business. See how TaxStreem gets you ready.</span>
         <b>Read more <ArrowRight size={14} /></b>
       </a>
       <div className="hdr-bar">
-        <a href="/" className="hdr-logo" aria-label="TaxStreem home">
+        <a href={link('/')} className="hdr-logo" aria-label="TaxStreem home">
           <img src={asset('/brand/taxstreem-logo-blue.svg')} alt="TaxStreem" width={132} height={24} />
         </a>
         <nav ref={nav} className="hdr-nav" aria-label="Main" onMouseLeave={leave}>
@@ -48,7 +64,7 @@ export function Header() {
                 {n.label} <ChevronDown size={14} />
               </button>
             ) : (
-              <a key={n.label} className="hdr-item" href={n.href} onMouseEnter={() => enter('')}>{n.label}</a>
+              <a key={n.label} className="hdr-item" href={link(n.href!)} onMouseEnter={() => enter('')}>{n.label}</a>
             ),
           )}
         </nav>
@@ -63,33 +79,34 @@ export function Header() {
         {current && <Panel key={current.label} item={current} />}
       </div>
 
-      <div className="sheet" data-show={sheet || undefined} aria-hidden={!sheet}>
-        <div className="sheet-top">
-          <img src={asset('/brand/taxstreem-logo-blue.svg')} alt="TaxStreem" width={120} height={22} />
-          <button aria-label="Close menu" onClick={() => setSheet(false)}><X size={22} /></button>
-        </div>
-        <div className="sheet-body">
-          {NAV.map((n) =>
-            n.groups ? (
-              <div key={n.label} className="sheet-group" data-open={acc === n.label || undefined}>
-                <button onClick={() => setAcc(acc === n.label ? null : n.label)} aria-expanded={acc === n.label}>{n.label}<ChevronDown size={18} /></button>
-                <div className="sheet-links">
-                  {n.groups.flatMap((g) => g.links).map((l) => (
-                    <a key={l.label} href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <a key={n.label} className="sheet-link" href={n.href}>{n.label}</a>
-            ),
-          )}
-        </div>
-        <div className="sheet-foot">
-          <a className="btn btn-ghost" href={LINKS.login}>Log in</a>
-          <a className="btn btn-primary" href={LINKS.start}>Get Started</a>
-        </div>
-      </div>
     </header>
+    <div className="sheet" data-show={sheet || undefined} aria-hidden={!sheet}>
+      <div className="sheet-top">
+        <img src={asset('/brand/taxstreem-logo-blue.svg')} alt="TaxStreem" width={120} height={22} />
+        <button aria-label="Close menu" onClick={() => setSheet(false)}><X size={22} /></button>
+      </div>
+      <div className="sheet-body">
+        {NAV.map((n) =>
+          n.groups ? (
+            <div key={n.label} className="sheet-group" data-open={acc === n.label || undefined}>
+              <button onClick={() => setAcc(acc === n.label ? null : n.label)} aria-expanded={acc === n.label}>{n.label}<ChevronDown size={18} /></button>
+              <div className="sheet-links">
+                {n.groups.flatMap((g) => g.links).map((l) => (
+                  <a key={l.label} href={link(l.href)} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a key={n.label} className="sheet-link" href={link(n.href!)}>{n.label}</a>
+          ),
+        )}
+      </div>
+      <div className="sheet-foot">
+        <a className="btn btn-ghost" href={LINKS.login}>Log in</a>
+        <a className="btn btn-primary" href={LINKS.start}>Get Started</a>
+      </div>
+    </div>
+    </>
   )
 }
 
@@ -102,7 +119,7 @@ function Panel({ item }: { item: NavItem }) {
           <div key={gi} className="mega-col">
             {g.heading && <h3>{g.heading}</h3>}
             {g.links.map((l, i) => (
-              <a key={l.label} href={l.href} className="mega-link" style={{ ['--i' as string]: i }} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>
+              <a key={l.label} href={link(l.href)} className="mega-link" style={{ ['--i' as string]: i }} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>
                 {l.icon && (
                   <span className="mega-ic">
                     {l.icon === 'martina' ? <img src={asset('/modules/martina-blue.svg')} alt="" width={18} height={18} /> : ICONS[l.icon]}
@@ -117,7 +134,7 @@ function Panel({ item }: { item: NavItem }) {
           </div>
         ))}
         {item.card && (
-          <a className="mega-card" href={item.card.href}>
+          <a className="mega-card" href={link(item.card.href)}>
             <b>{item.card.title}</b>
             <i>{item.card.line}</i>
             <span>{item.card.cta} <ArrowRight size={14} /></span>

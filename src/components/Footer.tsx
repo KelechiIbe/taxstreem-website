@@ -1,5 +1,5 @@
 import { LINKS, NAV } from '../content/site'
-import { asset } from '../lib/asset'
+import { asset, link } from '../lib/asset'
 
 const col = (label: string) => NAV.find((n) => n.label === label)!.groups!.flatMap((g) => g.links)
 const COLS: [string, { label: string; href: string; external?: boolean }[]][] = [
@@ -8,7 +8,7 @@ const COLS: [string, { label: string; href: string; external?: boolean }[]][] = 
   ['Resources', col('Resources').filter((l) => !['All Resources', 'Newsroom', 'Demos', 'Reports & Analysis'].includes(l.label))],
   ['Company', col('Company')],
   ['Legal and trust', [
-    { label: 'Trust Centre', href: '/security' }, { label: 'Privacy', href: LINKS.privacy }, { label: 'Terms', href: LINKS.terms }, { label: 'Service level agreement', href: '/sla' },
+    { label: 'Trust Centre', href: '/security' }, { label: 'Privacy', href: LINKS.privacy }, { label: 'Terms', href: LINKS.terms }, { label: 'Service level agreement', href: '/security' },
   ]],
 ]
 
@@ -26,7 +26,7 @@ export function Footer() {
               <h3>{h}</h3>
               <ul>
                 {links.map((l) => (
-                  <li key={l.label}><a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a></li>
+                  <li key={l.label}><a href={link(l.href)} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a></li>
                 ))}
               </ul>
             </nav>

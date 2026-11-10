@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, type ReactNode, type CSSProperties } from 'react'
 
-export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', kind = 'rise' }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'section' | 'li'; kind?: 'rise' | 'blur' | 'wipe' }) {
+export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', kind = 'rise', style }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'section' | 'li'; kind?: 'rise' | 'blur' | 'wipe'; style?: CSSProperties }) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => {
     const el = ref.current
@@ -11,5 +11,5 @@ export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', k
     return () => io.disconnect()
   }, [])
   const T = Tag as 'div'
-  return <T ref={ref as never} className={`reveal ${className}`} data-kind={kind} style={{ '--d': `${delay}ms` } as CSSProperties}>{children}</T>
+  return <T ref={ref as never} className={`reveal ${className}`} data-kind={kind} style={{ '--d': `${delay}ms`, ...style } as CSSProperties}>{children}</T>
 }

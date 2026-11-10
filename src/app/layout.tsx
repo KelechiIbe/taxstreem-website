@@ -1,3 +1,4 @@
+import { StackFx } from '../components/StackFx'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <style dangerouslySetInnerHTML={{ __html: FONTS }} />
       </head>
-      <body>{children}</body>
+      <body>{children}<StackFx /></body>
     </html>
   )
 }

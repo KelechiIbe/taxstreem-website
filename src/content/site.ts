@@ -82,16 +82,16 @@ export const NAV: NavItem[] = [
       {
         links: [
           { label: 'All Resources', line: 'Everything we have published.', href: '/resources' },
-          { label: 'Articles', line: 'Nigerian tax explained in plain English: VAT, WHT, CIT, PIT.', href: '/resources/articles' },
-          { label: 'Videos', line: 'Short explainers and walkthroughs.', href: '/resources/videos' },
-          { label: 'Demos', line: 'Watch each product do a real task.', href: '/resources/demos' },
+          { label: 'Articles', line: 'Nigerian tax explained in plain English: VAT, WHT, CIT, PIT.', href: '/resources#articles' },
+          { label: 'Videos', line: 'Short explainers and walkthroughs.', href: '/resources#videos' },
+          { label: 'Demos', line: 'Watch each product do a real task.', href: '/resources#demos' },
         ],
       },
       {
         links: [
-          { label: 'Reports & Analysis', line: 'Research on tax and business in Nigeria.', href: '/resources/reports' },
-          { label: 'Guides', line: 'Step-by-step guides, the tax calendar and the tax glossary.', href: '/resources/guides' },
-          { label: 'The Bridge', line: 'Our weekly open office. Bring a tax question, leave with an answer.', href: '/the-bridge' },
+          { label: 'Reports & Analysis', line: 'Research on tax and business in Nigeria.', href: '/resources#reports' },
+          { label: 'Guides', line: 'Step-by-step guides, the tax calendar and the tax glossary.', href: '/resources/glossary' },
+          { label: 'The Bridge', line: 'Our weekly open office. Bring a tax question, leave with an answer.', href: '/resources#the-bridge' },
           { label: 'Newsroom', line: 'Press coverage and announcements.', href: '/newsroom' },
         ],
       },

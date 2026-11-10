@@ -189,3 +189,87 @@ export function InventoryFilm() {
     </Stage>
   )
 }
+
+/* 6. Personal Income Tax: the return works itself out, in the product's own black-and-white screens. Figures are invented. */
+type P = { step: number; income: number; reliefs: boolean; tax: number; state: 'go' | 'busy' | 'done' }
+const PSTEPS = ['About you', 'Income', 'Reliefs', 'Review', 'Pay & file']
+export function PitFilm() {
+  const init: P = { step: 1, income: 0, reliefs: false, tax: 0, state: 'go' }
+  const script = async (a: Act<P>) => {
+    await a.wait(800)
+    await a.set({ income: 8400000 })
+    await a.wait(1400)
+    await a.set({ step: 2, reliefs: true })
+    await a.wait(1300)
+    await a.set({ step: 3, tax: 1094640 })
+    await a.wait(1500)
+    await a.set({ step: 4, state: 'busy' })
+    await a.wait(1300)
+    await a.set({ state: 'done' })
+    await a.wait(3600)
+    await a.set(init)
+    await a.wait(400)
+  }
+  return (
+    <Stage<P> width={520} height={480} initial={init} poster={{ step: 4, income: 8400000, reliefs: true, tax: 1094640, state: 'done' }} script={script} accent="#111111" className="mf mf-pit">
+      {(s) => (
+        <div className="mf-card">
+          <div className="pit-hero">
+            <span>2026 return · autosaved</span>
+            <b>Your return is <Count value={[19, 40, 62, 84, 100][s.state === 'done' ? 4 : s.step - 1 + (s.income ? 1 : 0)] ?? 100} />% done.</b>
+            <div className="pit-steps">{PSTEPS.map((p, i) => <i key={p} data-on={i <= s.step || undefined}><em>{p}</em></i>)}</div>
+          </div>
+          <div className="pit-row"><span>Income from 3 sources</span><b><Count value={s.income} format={naira} /></b></div>
+          <div className="pit-row" data-dim={!s.reliefs || undefined}><span>Pension contribution, 8%</span><b>{s.reliefs ? '−' + naira(672000) : '—'}</b></div>
+          <div className="pit-row" data-dim={!s.reliefs || undefined}><span>Rent relief, 20% of rent paid</span><b>{s.reliefs ? '−' + naira(480000) : '—'}</b></div>
+          <div className="pit-row pit-total"><span>Tax for the year</span><b><Count value={s.tax} format={naira} /></b></div>
+          <div className="mf-foot">
+            <span className="mf-dim">File by 31 March 2027 · LIRS</span>
+            <States value={s.state} align="end" states={{ go: <span className="mf-btn pit-btn">Review and file</span>, busy: <Badge icon={<Spinner size={11} />}>Filing with LIRS</Badge>, done: <Badge tone="success" icon={<Check on size={12} />}>Filed · receipt saved</Badge> }} />
+          </div>
+        </div>
+      )}
+    </Stage>
+  )
+}
+
+/* 7. Accountant portal: the Clients list works through the day's urgent items. Clients and figures are invented. */
+type Q = { done: number }
+const CLIENTS: [string, string, string, string][] = [
+  ['Adaeze Foods Limited', 'VAT due in 3 days', 'Filed', '₦685,674'],
+  ['Lekki Print Hub', '2 answers from client', 'Reviewed', '₦118,300'],
+  ['Northgate Schools', '14 bank lines to match', 'Reconciled', '₦0'],
+  ['Harbour Clinic', 'WHT schedule ready', 'Filed', '₦212,500'],
+]
+export function PortalFilm() {
+  const script = async (a: Act<Q>) => {
+    await a.wait(900)
+    for (let i = 1; i <= 4; i++) { await a.set({ done: i }); await a.wait(950) }
+    await a.wait(3000)
+    await a.set({ done: 0 })
+    await a.wait(400)
+  }
+  return (
+    <Stage<Q> width={620} height={430} initial={{ done: 0 }} poster={{ done: 4 }} script={script} {...common} className="mf mf-portal">
+      {(s) => (
+        <div className="mf-card">
+          <div className="mf-h">Clients<span>Okafor &amp; Bello Chartered Accountants · 12 businesses</span></div>
+          <div className="po-tiles">
+            <div><span>Due in 14 days</span><b><Count value={4 - Math.min(s.done, 4) + 3} /></b></div>
+            <div><span>Answers from clients</span><b><Count value={s.done >= 2 ? 0 : 2} /></b></div>
+            <div><span>Earned this month</span><b>{naira(184500)}</b></div>
+          </div>
+          <div className="po-th"><span>Client</span><span>Status</span><span>Liabilities</span></div>
+          {CLIENTS.map(([n, todo, ok, amt], i) => (
+            <div key={n} className="po-tr" data-on={s.done > i || undefined}>
+              <span><b>{n}</b></span>
+              <span><States value={s.done > i ? 'ok' : 'todo'} align="start" states={{ todo: <Badge tone={i === 0 ? 'warning' : 'neutral'} dot>{todo}</Badge>, ok: <Badge tone="success" icon={<Check on size={12} />}>{ok}</Badge> }} /></span>
+              <span>{amt}</span>
+            </div>
+          ))}
+          <div className="po-tr" data-crop><span><Bar w={150} h={8} tone={3} /></span><span><Bar w={110} h={18} r={9} tone={1} /></span><span><Bar w={60} h={8} tone={2} /></span></div>
+        </div>
+      )}
+    </Stage>
+  )
+}
