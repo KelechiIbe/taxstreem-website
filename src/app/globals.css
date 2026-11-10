@@ -778,3 +778,4 @@ button.ap-primary:hover { background: var(--blue-600); } .ap-primary:disabled { 
 .mods li.on { border-color: transparent; box-shadow: 0 0 0 1px var(--blue-200), 0 44px 80px -48px rgba(0,60,160,.7); } .mods li.on .mods-ic { box-shadow: 0 0 0 6px rgba(0,114,245,.14), 0 16px 30px -14px rgba(0,114,245,.8); } .mods-ic { transition: box-shadow .4s; }
 .mods-beam { border-width: 2.5px; } .mods-beam::after { width: 320px; background: linear-gradient(to left, #9cc8ff, #0072f5 40%, transparent); offset-path: rect(0 auto auto 0 round 24px); animation-duration: 4.5s; }
 @media (min-width: 821px) { .mods li.on { transform: translateY(-4px); } }
+.mods li { overflow: hidden; }
