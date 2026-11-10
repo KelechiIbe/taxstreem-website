@@ -13,6 +13,7 @@ import { LiveProduct } from '../../components/LiveProduct'
 import { VatClaimFilm, WhtCreditFilm, StatementsFilm, ReturnsFilm, CloseFilm, ReconFilm } from '../../demos/SolutionFilms'
 import { LivePortal } from '../../components/LivePortal'
 import { PortalTour } from '../../demos/PortalTour'
+import { ResourcesBody, NewsroomBody } from '../../components/Cms'
 import { Integrations } from '../../components/Integrations'
 import { Newsletter } from '../../components/Newsletter'
 import { HeroFilm } from '../../demos/HeroFilm'
@@ -135,12 +136,20 @@ export default function Page({ params }: { params: { slug: string[] } }) {
             {tables[0].rows.map((r, i) => { const h = link(PRODUCT_PATH[r[1].x] ?? '/'); return <Reveal as="li" key={r[0].x} delay={i * 60}><a href={h} target={/^http/.test(h) ? '_blank' : undefined} rel="noopener"><span><b>{r[0].x}</b><i>{r[1].x}</i></span><ArrowRight size={20} /></a></Reveal> })}
           </ul></div></section>
         )}
-        {def.kind === 'cms' && (
+        {def.cms === 'Resources' && <>
+          <ResourcesBody bridgeLine="Our weekly open office. Bring a tax question, leave with an answer." />
+          <section className="chap"><div className="wrap">
+            <div className="pg-h" style={{ marginTop: 0 }}><h2>Guides in preparation</h2></div>
+            <ol className="psteps">{(COPY['Search and AI answers'].filter((b) => b.k === 'ol')[0] as unknown as Extract<Block, { k: 'ul' | 'ol' }>).items.map((it, n) => <li key={n}><span>{n + 1}</span><p>{it.x}</p></li>)}</ol>
+            <p className="ptext"><a className="inl" href={link('/resources/glossary')}>Read the tax glossary <ArrowRight size={14} /></a></p>
+            <div className="news-band"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Newsletter id="news-resources" big /></div>
+          </div></section>
+        </>}
+        {def.cms === 'Newsroom' && <NewsroomBody />}
+        {def.cms === 'Careers' && (
           <section className="sec pg-first"><div className="wrap">
-            {def.cms === 'Careers' && <ul className="pslots two"><Reveal as="li" kind="wipe"><Photo n={18} brief="" ratio="16 / 10" src="/photos/photo-18.jpg" alt="Three teammates working through figures at a shared desk" /></Reveal><Reveal as="li" kind="wipe" delay={100}><Photo n={19} brief="" ratio="16 / 10" src="/photos/photo-19.jpg" alt="Two engineers reviewing work on a monitor" /></Reveal></ul>}
-            <div className="cms"><b>This page fills from the TaxStreem CMS.</b><p>Every {def.cms === 'Careers' ? 'open role' : def.cms === 'Newsroom' ? 'press item' : 'article, video and guide'} already published there appears here in this design once the site is connected to it.</p>
-              <ul aria-hidden>{[0, 1, 2].map((i) => <li key={i}><i /><span /><span /></li>)}</ul></div>
-            {def.cms === 'Resources' && <><div className="pg-h"><h2>Guides in preparation</h2></div><ol className="psteps">{(COPY['Search and AI answers'].filter((b) => b.k === 'ol')[0] as unknown as Extract<Block, { k: 'ul' | 'ol' }>).items.map((it, n) => <li key={n}><span>{n + 1}</span><p>{it.x}</p></li>)}</ol><p className="ptext"><a className="inl" href={link('/resources/glossary')}>Read the tax glossary <ArrowRight size={14} /></a></p><div className="news-band"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Newsletter id="news-resources" big /></div></>}
+            <ul className="pslots two"><Reveal as="li" kind="wipe"><Photo n={18} brief="" ratio="16 / 10" src="/photos/photo-18.jpg" alt="Three teammates working through figures at a shared desk" /></Reveal><Reveal as="li" kind="wipe" delay={100}><Photo n={19} brief="" ratio="16 / 10" src="/photos/photo-19.jpg" alt="Two engineers reviewing work on a monitor" /></Reveal></ul>
+            <div className="cms"><b>Open roles will be listed here.</b><p>This page fills from the TaxStreem CMS once roles are published there. Until then, write to us about working at TaxStreem.</p><p style={{ margin: 0 }}><a className="btn btn-primary" href={link('/contact')}>Contact us <ArrowRight size={16} /></a></p></div>
           </div></section>
         )}
 

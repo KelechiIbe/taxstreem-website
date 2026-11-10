@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 
-const CARDS = '.flist > li, .rlist > li, .pr-plans > li, .mods > li, .products > li, .dt tbody > tr, .inds > li'
+const CARDS = '.flist > li, .rlist > li, .pr-plans > li, .mods > li, .products > li, .dt tbody > tr, .inds > li, .ngrid > li'
 
 /** Phones: once the next card has slid over a stacked card, trim the covered card to its top edge so nothing shows through underneath. */
 export function StackFx() {
