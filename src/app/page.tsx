@@ -22,7 +22,7 @@ const PHOTO_BRIEFS = [
 ]
 const PHOTO_ALT = ['Two colleagues reviewing figures on a tablet in an office', 'A pharmacist serving a customer at the counter', 'A freelancer working on a laptop at home', 'An accountant explaining a report to a client']
 const FILMS = [<ConnectFilm key="c" />, <ReviewFilm key="r" />, <FileFilm key="f" />]
-const PRESS = ['Punch', 'ThisDay', 'Techparley', 'Technaija', 'Innovation Village', 'The CFO Magazine']
+const PRESS: [string, string, number][] = [['Forbes', 'forbes', 26], ['TechCabal', 'techcabal', 25], ['The Guardian', 'guardian', 25], ['Punch', 'punch', 28], ['ThisDay', 'thisday', 31], ['Nairametrics', 'nairametrics', 19], ['BusinessDay', 'businessday', 27], ['Vanguard', 'vanguard', 22]]
 
 const jsonLd = [
   { '@context': 'https://schema.org', '@type': 'Organization', name: 'TaxStreem', legalName: 'TaxStreem Technologies Inc.', url: 'https://www.taxstreem.com', logo: 'https://www.taxstreem.com/brand/taxstreem-logo-blue.svg', areaServed: 'NG', email: 'hello@taxstreem.com' },
@@ -64,12 +64,16 @@ export default function Home() {
         <section className="proof">
           <div className="wrap proof-in">
             <p>As covered in</p>
-            <ul className="press">{PRESS.map((p) => <li key={p}>{p}</li>)}</ul>
             <div className="backers">
               <span>Supported by</span>
               <img src={asset('/partners/nvidia-inception.png')} alt="NVIDIA Inception Program" height={34} />
               <img src={asset('/partners/google-for-startups.png')} alt="Google for Startups" height={20} />
             </div>
+          </div>
+          <div className="pmarq" aria-label="Press coverage: Forbes, TechCabal, The Guardian, Punch, ThisDay, Nairametrics, BusinessDay and Vanguard">
+            <ul>
+              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}><img src={asset(`/press/${f}.png`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" /></li>))}
+            </ul>
           </div>
         </section>
 
