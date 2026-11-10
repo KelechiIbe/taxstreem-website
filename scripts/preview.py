@@ -18,7 +18,9 @@ build = [d for d in os.listdir(os.path.join(pv, 'nx/static')) if d not in ('chun
 os.rename(os.path.join(pv, 'nx/static', build), os.path.join(pv, 'nx/static/build'))
 slug = os.path.join(pv, 'nx/static/chunks/app/[...slug]')
 os.path.isdir(slug) and os.rename(slug, os.path.join(pv, 'nx/static/chunks/app/slug'))
-subs = [('_next/', 'nx/'), (build + '/_buildManifest', 'build/buildManifest'), (build + '/_ssgManifest', 'build/ssgManifest'), (build, 'build'), ('pages/_app-', 'pages/app-'), ('pages/_error-', 'pages/error-'), ('app/_not-found/', 'app/not-found/'), ('app/%5B...slug%5D/', 'app/slug/'), ('app/[...slug]/', 'app/slug/')]
+art = os.path.join(pv, 'nx/static/chunks/app/resources/articles/[slug]')
+os.path.isdir(art) and os.rename(art, os.path.join(pv, 'nx/static/chunks/app/resources/articles/slug'))
+subs = [('_next/', 'nx/'), (build + '/_buildManifest', 'build/buildManifest'), (build + '/_ssgManifest', 'build/ssgManifest'), (build, 'build'), ('pages/_app-', 'pages/app-'), ('pages/_error-', 'pages/error-'), ('app/_not-found/', 'app/not-found/'), ('app/%5B...slug%5D/', 'app/slug/'), ('app/[...slug]/', 'app/slug/'), ('articles/%5Bslug%5D/', 'articles/slug/'), ('articles/[slug]/', 'articles/slug/')]
 for d, _, fs in os.walk(pv, topdown=False):
     for f in fs:
         p = os.path.join(d, f)
