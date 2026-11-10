@@ -766,3 +766,15 @@ button.ap-primary:hover { background: var(--blue-600); } .ap-primary:disabled { 
 }
 .nthumb { position: relative; } .nthumb > b { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; font-family: var(--font-display); font-size: 22px; letter-spacing: -0.02em; color: #5b6676; text-align: center; } .nthumb > b img { height: 30px; width: auto; max-width: 70%; object-fit: contain; opacity: .55; }
 .nthumb-pic { position: absolute; inset: 0; }
+
+/* about: black mission card with fine grain */
+.ab-mission { background: radial-gradient(120% 90% at 100% 0%, #1d1d1f 0, #070708 62%); color: #fff; } .ab-mission h2 { color: #a4abb5; }
+.ab-mission::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .22; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.25' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .7 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); background-size: 180px 180px; }
+.socials a { width: 44px; padding: 0; justify-content: center; }
+/* press logo that links out */
+.pmarq a { display: flex; align-items: center; min-height: 40px; } .pmarq a img { opacity: .78; } .pmarq a:hover img { opacity: 1; }
+/* modules: a light runs round the selected card */
+.mods li { position: relative; cursor: pointer; transition: opacity .8s var(--ease) var(--d, 0ms), transform .5s var(--ease), border-color .3s, box-shadow .45s; } .mods li:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.mods li.on { border-color: transparent; box-shadow: 0 0 0 1px var(--blue-200), 0 44px 80px -48px rgba(0,60,160,.7); } .mods li.on .mods-ic { box-shadow: 0 0 0 6px rgba(0,114,245,.14), 0 16px 30px -14px rgba(0,114,245,.8); } .mods-ic { transition: box-shadow .4s; }
+.mods-beam { border-width: 2.5px; } .mods-beam::after { width: 320px; background: linear-gradient(to left, #9cc8ff, #0072f5 40%, transparent); offset-path: rect(0 auto auto 0 round 24px); animation-duration: 4.5s; }
+@media (min-width: 821px) { .mods li.on { transform: translateY(-4px); } }

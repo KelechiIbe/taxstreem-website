@@ -22,6 +22,7 @@ const PHOTO_BRIEFS = [
 ]
 const PHOTO_ALT = ['Two colleagues reviewing figures on a tablet in an office', 'A pharmacist serving a customer at the counter', 'A freelancer working on a laptop at home', 'An accountant explaining a report to a client']
 const FILMS = [<ConnectFilm key="c" />, <ReviewFilm key="r" />, <FileFilm key="f" />]
+const PRESS_LINK: Record<string, string> = { forbes: 'https://www.forbes.com/sites/daraabasiita/2026/10/03/digital-invoices-may-give-ai-lenders-something-new-to-work-with/' }
 const PRESS: [string, string, number][] = [['Forbes', 'forbes', 26], ['TechCabal', 'techcabal', 25], ['The Guardian', 'guardian', 25], ['Punch', 'punch', 28], ['ThisDay', 'thisday', 31], ['Nairametrics', 'nairametrics', 19], ['BusinessDay', 'businessday', 27], ['Vanguard', 'vanguard', 22]]
 
 const jsonLd = [
@@ -72,7 +73,7 @@ export default function Home() {
           </div>
           <div className="pmarq" aria-label="Press coverage: Forbes, TechCabal, The Guardian, Punch, ThisDay, Nairametrics, BusinessDay and Vanguard">
             <ul>
-              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}><img src={asset(`/press/${f}.png`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" /></li>))}
+              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}>{PRESS_LINK[f] ? <a href={PRESS_LINK[f]} target="_blank" rel="noopener" tabIndex={k > 0 ? -1 : undefined} aria-label={`${n}: read the article (opens in a new tab)`}><img src={asset(`/press/${f}.png`)} alt="" style={{ height: h }} loading="lazy" /></a> : <img src={asset(`/press/${f}.png`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" />}</li>))}
             </ul>
           </div>
         </section>

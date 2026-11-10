@@ -91,7 +91,7 @@ export const NAV: NavItem[] = [
         links: [
           { label: 'Reports & Analysis', line: 'Research on tax and business in Nigeria.', href: '/resources#reports' },
           { label: 'Guides', line: 'Step-by-step guides, the tax calendar and the tax glossary.', href: '/resources/glossary' },
-          { label: 'The Bridge', line: 'Our weekly open office. Bring a tax question, leave with an answer.', href: '/resources#the-bridge' },
+          { label: 'The Bridge', line: 'Our weekly open office. Bring a tax question, leave with an answer.', href: 'https://www.taxstreem.com/the-bridge', external: true },
           { label: 'Newsroom', line: 'Press coverage and announcements.', href: '/newsroom' },
         ],
       },

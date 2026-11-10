@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useRef, type ReactNode, type CSSProperties } from 'react'
+import { useEffect, useRef, type ReactNode, type CSSProperties, type HTMLAttributes } from 'react'
 
-export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', kind = 'rise', style }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'section' | 'li'; kind?: 'rise' | 'blur' | 'wipe'; style?: CSSProperties }) {
+export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', kind = 'rise', style, ...rest }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'section' | 'li'; kind?: 'rise' | 'blur' | 'wipe'; style?: CSSProperties } & Omit<HTMLAttributes<HTMLElement>, 'children' | 'className' | 'style'>) {
   const ref = useRef<HTMLElement>(null)
   useEffect(() => {
     const el = ref.current
@@ -11,5 +11,5 @@ export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', k
     return () => io.disconnect()
   }, [])
   const T = Tag as 'div'
-  return <T ref={ref as never} className={`reveal ${className}`} data-kind={kind} style={{ '--d': `${delay}ms`, ...style } as CSSProperties}>{children}</T>
+  return <T {...(rest as object)} ref={ref as never} className={`reveal ${className}`} data-kind={kind} style={{ '--d': `${delay}ms`, ...style } as CSSProperties}>{children}</T>
 }
