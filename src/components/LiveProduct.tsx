@@ -194,7 +194,7 @@ export function LiveProduct() {
             </>}
           </div>
 
-          <div className="ap-drawer" data-show={drawer || undefined} aria-hidden={!drawer}>
+          <div className="ap-drawer" data-show={drawer || undefined} aria-hidden={!drawer} {...(drawer ? {} : ({ inert: '' } as object))}>
             <div className="ap-dh"><b>Emberline Software Limited</b><button aria-label="Close" onClick={() => setDrawer(false)}><X size={18} /></button></div>
             <div className="ap-paper"><span>INVOICE INV-2041</span><b>{N(BILL)}</b><i>Annual design software licences, 24 seats</i></div>
             <ul className="ap-checks">

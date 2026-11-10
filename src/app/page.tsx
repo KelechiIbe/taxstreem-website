@@ -10,6 +10,7 @@ import { ConnectFilm, ReviewFilm, FileFilm, EInvoiceFilm, InventoryFilm } from '
 import { Aurora, Flow, Grain } from '../components/Backdrop'
 import { Photo } from '../components/Photo'
 import { Hub } from '../components/Hub'
+import { Later } from '../components/Later'
 import { Spotlight } from '../components/Spotlight'
 import { LINKS, RESULTS, PRODUCTS, STEPS, FAQ } from '../content/site'
 import { asset, link } from '../lib/asset'
@@ -126,7 +127,7 @@ export default function Home() {
             <ol className="steps">
               {STEPS.map((s, i) => (
                 <Reveal as="li" key={s.title} delay={i * 90}>
-                  <div className="step-film">{FILMS[i]}</div>
+                  <div className="step-film"><Later w={380} h={250} className="mf">{FILMS[i]}</Later></div>
                   <span className="step-n">{i + 1}</span>
                   <h3>{s.title}</h3>
                   <p>{s.copy}</p>
@@ -155,7 +156,7 @@ export default function Home() {
             </Reveal>
             <Reveal className="stack" delay={120} kind="wipe">
               <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" src="/photos/photo-5.jpg" alt="A shopper checking a product against her phone beside a shelf" />
-              <div className="film"><InventoryFilm /></div>
+              <div className="film"><Later w={520} h={420} className="mf mf-stock"><InventoryFilm /></Later></div>
             </Reveal>
           </div>
         </section>
@@ -169,7 +170,7 @@ export default function Home() {
             </Reveal>
             <Reveal className="stack-phone" delay={120} kind="wipe">
               <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" src="/photos/photo-6.jpg" alt="A business owner reading a message on his phone" />
-              <MartinaChat />
+              <Later w={380} h={560} className="mc"><MartinaChat /></Later>
             </Reveal>
           </div>
         </section>
@@ -179,7 +180,7 @@ export default function Home() {
             <Reveal className="duo-card">
               <h2>Ready for NRS e-invoicing before it reaches you.</h2>
               <p>Nigeria is moving every business to electronic invoices validated by the NRS. TaxStreem sends each invoice to the NRS, returns it with its Invoice Reference Number and QR code, and delivers it to your customer. TaxStreem&rsquo;s accreditation as a System Integrator and Access Point Provider is in progress.</p>
-              <div className="duo-film"><EInvoiceFilm /></div>
+              <div className="duo-film"><Later w={460} h={376} className="mf mf-inv"><EInvoiceFilm /></Later></div>
               <a className="more" href={link('/e-invoicing')}>See how e-invoicing works <ArrowRight size={14} /></a>
             </Reveal>
             <Reveal className="duo-card duo-dark" delay={100}>

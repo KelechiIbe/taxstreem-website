@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import './stage.css'
 import { checkSeam, createAct, Stopped, type Script } from './act'
 import { Cursor, ripple as spawnRipple, type CursorKind, type CursorStyle } from './cursor'
@@ -125,6 +125,10 @@ export function Stage<S extends object>({
     return typeof at === 'object' && 'wide' in at ? at[layoutRef.current] : at
   }
   const [grows, setGrows] = useState(false)
+  // Until the first measure (server HTML, and the moment before hydration) the box is sized and the scene
+  // scaled by CSS alone, so nothing overflows or jumps when the script arrives. See .ss-fit[data-prefit].
+  const [fitted, setFitted] = useState(false)
+  const ssid = useId()
   const designW = layout === 'compact' && compact ? compact.width : width
   const designH = layout === 'compact' && compact ? compact.height : height
 
@@ -189,6 +193,7 @@ export function Stage<S extends object>({
       // A design narrower than its box (a compact layout, or a stage that has
       // stopped at its design size) sits in the middle of it, not at its left
       setInset(Math.max(0, (w - dw * s) / 2))
+      setFitted(true)
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -568,7 +573,21 @@ export function Stage<S extends object>({
   const showCursor = cursor && (!script || !still || cursor.still)
 
   return (
-    <div ref={fitRef} className={`ss-fit${className ? ` ${className}` : ''}`} style={{ maxWidth: grows ? undefined : width, height: designH * scale }}>
+    <div
+      ref={fitRef}
+      className={`ss-fit${className ? ` ${className}` : ''}`}
+      data-prefit={!fitted || undefined}
+      data-ssid={!fitted && compact ? ssid : undefined}
+      style={fitted ? { maxWidth: grows ? undefined : width, height: designH * scale } : ({ maxWidth: fillProp ? width * 2 : width, ['--ss-dw' as string]: `${width}px`, ['--ss-ar' as string]: `${width} / ${height}` } as CSSProperties)}
+    >
+      {!fitted && compact && (
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `@container (max-width:${compact.below - 0.02}px){[data-ssid="${ssid}"]>.ss-sizer{width:min(100%,${compact.width}px);aspect-ratio:${compact.width}/${compact.height}}[data-ssid="${ssid}"]>.ss-stage{visibility:hidden}}`,
+          }}
+        />
+      )}
+      {!fitted && <i className="ss-sizer" aria-hidden />}
       <div
         ref={rootRef}
         className="ss-stage"

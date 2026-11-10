@@ -15,6 +15,25 @@
     margin-inline: auto;
   }
 
+  /* Before the first measure the box and the scene are sized by CSS alone:
+     the sizer holds the design's proportions, and the scene is scaled to the
+     box's width (tan(atan2()) turns two lengths into a plain ratio). */
+  .ss-fit[data-prefit] {
+    container-type: inline-size;
+  }
+
+  .ss-fit[data-prefit] > .ss-sizer {
+    display: block;
+    width: 100%;
+    margin-inline: auto;
+    aspect-ratio: var(--ss-ar);
+  }
+
+  .ss-fit[data-prefit] > .ss-stage {
+    left: max(0px, calc((100cqw - var(--ss-dw)) / 2));
+    transform: scale(min(1, tan(atan2(100cqw, var(--ss-dw))))) !important;
+  }
+
   .ss-stage {
     /* Surfaces */
     --ss-canvas: #f6f5f4;
