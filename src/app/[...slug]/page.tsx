@@ -14,6 +14,7 @@ import { VatClaimFilm, WhtCreditFilm, StatementsFilm, ReturnsFilm, CloseFilm, Re
 import { LivePortal } from '../../components/LivePortal'
 import { PortalTour } from '../../demos/PortalTour'
 import { ResourcesBody, NewsroomBody } from '../../components/Cms'
+import { Bio } from '../../components/Bio'
 import { Modules } from '../../components/Modules'
 import { Integrations } from '../../components/Integrations'
 import { Newsletter } from '../../components/Newsletter'
@@ -204,7 +205,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
                   {([['Kelechi Ibe', 'Co-Founder and CEO', 'kelechi-ibe', bios.kelechi, 'https://www.linkedin.com/in/kelechi-ibe/', 'https://x.com/IbeKelechi_'], ['Ayo Samuel', 'Co-Founder and CTO', 'ayo-samuel', bios.ayo, 'https://www.linkedin.com/in/sam-ayo/', 'https://x.com/officialsamayo']] as const).map(([n, role, f, bio, li, x], i) => (
                     <Reveal as="li" key={n} delay={i * 100}>
                       <img src={asset(`/team/${f}-bw.jpg`)} alt={n} loading="lazy" width={840} height={1120} />
-                      <div><h3>{n}</h3><b>{role}</b><p>{bio[0]}</p>{bio.length > 1 && <details><summary>Read more</summary>{bio.slice(1).map((t, j) => <p key={j}>{t}</p>)}</details>}
+                      <div><h3>{n}</h3><b>{role}</b><Bio paras={bio} id={`bio-${f}`} />
                         <p className="socials">
                           <a href={li} target="_blank" rel="noopener" aria-label={`${n} on LinkedIn`}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" /></svg></a>
                           <a href={x} target="_blank" rel="noopener" aria-label={`${n} on X`}><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z" /></svg></a>
