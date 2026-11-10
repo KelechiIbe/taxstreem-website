@@ -1,0 +1,14 @@
+.mc .ss-stage { font-family: var(--font-sans); background: transparent; }
+.mc .mc-phone { position: absolute; left: 25px; top: 14px; }
+.mc .mc-app { display: flex; flex-direction: column; height: 100%; background: #efeae2; }
+.mc .mc-head { display: flex; align-items: center; gap: 10px; padding: 52px 14px 10px; background: #fff; border-bottom: 1px solid rgba(0,0,0,.08); }
+.mc .mc-avatar { width: 36px; height: 36px; border-radius: 50%; background: #0072f5; display: grid; place-items: center; flex: none; }
+.mc .mc-avatar img { width: 20px; height: 20px; }
+.mc .mc-who { display: flex; flex-direction: column; line-height: 1.25; }
+.mc .mc-who b { font-size: 15px; color: #0b1220; }
+.mc .mc-who i { font-style: normal; font-size: 12px; color: #6b7482; }
+.mc .mc-thread { flex: 1; min-height: 0; padding: 8px 10px 16px; }
+.mc .mc-list { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+.mc .mc-line { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; }
+.mc .mc-line b { font-variant-numeric: tabular-nums; }
+.mc .mc-line i { grid-column: 1 / -1; font-style: normal; font-size: 12px; opacity: .65; }
