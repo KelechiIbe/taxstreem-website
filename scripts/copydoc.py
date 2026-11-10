@@ -50,3 +50,12 @@ if '--outline' in sys.argv:
             if b['k'] == 'table': print('   table', b['head'], len(b['rows']), '| first:', ' / '.join(c['x'][:26] for c in b['rows'][0]))
             elif b['k'] in ('ol', 'ul'): print('  ', b['k'], len(b['items']), b['items'][0]['x'][:60])
             else: print('  ', b['k'], ('*' if b['r'][0]['b'] else ' '), b['x'][:92])
+
+import os
+# Added after the doc was approved: the Gold tier (Kelechi, 10 Nov). Remove once the doc carries the row.
+_p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src/content/copy.json'); _c = json.load(open(_p))
+for _b in _c['Partners']:
+    if _b['k'] == 'table' and _b['head'][0] == 'Tier' and not any(r[0]['x'] == 'Gold' for r in _b['rows']):
+        _cell = lambda t: {'x': t, 'r': [{'t': t, 'b': False}]}
+        _b['rows'].append([_cell('Gold'), _cell('25 or more'), _cell('18%'), _cell("6 months from each business's first payment")])
+json.dump(_c, open(_p, 'w'), ensure_ascii=False)
