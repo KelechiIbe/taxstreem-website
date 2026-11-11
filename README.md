@@ -12,6 +12,20 @@ One command, run from Google Cloud Shell in the project to publish to (staging o
 It deploys the `taxstreem-web-v2` service in `us-central1` and prints its `.run.app` address. It does not touch the current website or the domain.
 Full steps, what to check and what to do if it stops: [DEPLOY.md](DEPLOY.md).
 
+## Sharing cards
+
+Each page has a 1200 by 630 card in `public/og`, shown when its link is shared on WhatsApp, LinkedIn or X. The cards are
+made from each page's own headline, so remake them after a headline changes:
+
+```sh
+npm run dev                                   # in one terminal
+node scripts/og.cjs http://localhost:3000     # in another; needs Playwright (npx playwright install chromium)
+```
+
+Titles and descriptions come from the "Search and AI answers" table in the copy, with a few strengthened in
+`src/content/pages.ts`. Structured data (company, products and prices, glossary terms, videos, articles) is built in
+`src/lib/seo.ts` and the page files; prices are read from the pricing copy.
+
 ## Settings (`.env.production`, read at build time, no secrets)
 
 | Name | What it is |

@@ -5,8 +5,9 @@ import './globals.css'
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.taxstreem.com'),
   title: 'TaxStreem: accounting and tax filing software for Nigerian businesses',
-  description: 'Accounting, bookkeeping and tax filing in one place. Keep your books, recover input VAT and file VAT, WHT, CIT and PIT returns with the NRS and State Internal Revenue Services from one place.',
-  openGraph: { title: 'TaxStreem', description: 'Tax compliance, finally on autopilot.', type: 'website', locale: 'en_NG', siteName: 'TaxStreem' },
+  description: 'Keep your books, recover input VAT and file VAT, WHT, CIT and PIT returns with the NRS and State Internal Revenue Services from one place.',
+  openGraph: { title: 'TaxStreem', description: 'Accounting and tax filing software for Nigerian businesses.', type: 'website', locale: 'en_NG', siteName: 'TaxStreem', images: [{ url: '/og/home.jpg', width: 1200, height: 630, alt: 'TaxStreem' }] },
+  twitter: { card: 'summary_large_image', site: '@taxstreem' },
   icons: { icon: (process.env.NEXT_PUBLIC_BASE ?? '') + '/brand/taxstreem-icon-blue.svg' },
 }
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#ffffff' }

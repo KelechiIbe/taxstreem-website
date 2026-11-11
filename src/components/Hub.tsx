@@ -14,9 +14,9 @@ export function Hub({ dark }: { dark?: boolean }) {
         {L.map((y, i) => <g key={'l' + i}><path d={`M 170 ${y} C 330 ${y}, 340 200, 500 200`} className="hub-base" /><path d={`M 170 ${y} C 330 ${y}, 340 200, 500 200`} className="hub-run" pathLength={100} style={{ animationDelay: `${i * -0.9}s` }} /></g>)}
         {R.map((y, i) => <g key={'r' + i}><path d={`M 500 200 C 660 200, 670 ${y}, 830 ${y}`} className="hub-base" /><path d={`M 500 200 C 660 200, 670 ${y}, 830 ${y}`} className="hub-run out" pathLength={100} style={{ animationDelay: `${i * -1.1 - 1.4}s` }} /></g>)}
       </svg>
-      <ul className="hub-col hub-l">{LEFT.map(([f, n]) => <li key={f}><img src={asset(`/partners/${f}${d}.png`)} alt={n} loading="lazy" /></li>)}</ul>
+      <ul className="hub-col hub-l">{LEFT.map(([f, n]) => <li key={f}><img src={asset(`/partners/${f}${d}.webp`)} alt={n} loading="lazy" /></li>)}</ul>
       <div className="hub-core"><img src={asset('/brand/taxstreem-icon-white.svg')} alt="TaxStreem" /></div>
-      <ul className="hub-col hub-r">{RIGHT.map(([f, n]) => <li key={f}><img src={asset(`/partners/${f}${d}.png`)} alt={n} loading="lazy" /></li>)}</ul>
+      <ul className="hub-col hub-r">{RIGHT.map(([f, n]) => <li key={f}><img src={asset(`/partners/${f}${d}.webp`)} alt={n} loading="lazy" /></li>)}</ul>
     </div>
   )
 }

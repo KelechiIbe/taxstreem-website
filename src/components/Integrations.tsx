@@ -18,7 +18,7 @@ export function Integrations({ rows }: { rows: IntRow[] }) {
             {r.items.map((it) => (
               <li key={it.name}>
                 <span className="itab-logo">
-                  {it.name === 'Countev' ? <img src={asset('/brand/taxstreem-logo-blue.svg')} alt="" /> : LOGO[it.name] ? <img src={asset(`/partners/${LOGO[it.name]}.png`)} alt="" loading="lazy" /> : <FileUp size={26} aria-hidden />}
+                  {it.name === 'Countev' ? <img src={asset('/brand/taxstreem-logo-blue.svg')} alt="" /> : LOGO[it.name] ? <img src={asset(`/partners/${LOGO[it.name]}.webp`)} alt="" loading="lazy" /> : <FileUp size={26} aria-hidden />}
                 </span>
                 <b>{NAME[it.name] ?? it.name}</b>
                 <span className="itab-st" data-soon={it.soon || undefined}><i />{it.soon ? 'Coming soon' : 'Live'}</span>

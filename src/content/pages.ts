@@ -42,6 +42,17 @@ export const PAGES: PageDef[] = [
 
 const seo = (COPY['Search and AI answers'].find((b) => b.k === 'table') as Extract<Block, { k: 'table' }>).rows
 export const SEO: Record<string, { title: string; description: string }> = Object.fromEntries(seo.map((r) => [r[1].x, { title: r[2].x, description: r[3].x }]))
+/* Tags the copy table leaves thin or empty. A title wants its subject and a reason to click; a description wants a full sentence. */
+Object.assign(SEO, {
+  '/pricing': { title: 'TaxStreem pricing: accounting and tax software from ₦30,000 a month', description: SEO['/pricing']?.description },
+  '/about': { title: 'About TaxStreem: tax and accounting infrastructure for Africa', description: SEO['/about']?.description },
+  '/contact': { title: 'Contact TaxStreem: sales, support, security and press', description: 'Reach the TaxStreem team in Lagos. Addresses for sales, account support, partnerships, security and press, and a form that reaches us within one working day.' },
+  '/industries': { title: 'TaxStreem by industry: retail, services, manufacturing and more', description: SEO['/industries']?.description },
+  '/security': { title: 'TaxStreem Trust Centre: security, NDPA and GDPR compliance', description: SEO['/security']?.description },
+  '/modules': { title: 'Numens, Prism, Atlas, Flux and Martina: the TaxStreem modules', description: 'The five engines inside every TaxStreem product: tax intelligence, invoicing and e-invoicing, accounting and inventory, filing, and the Martina AI agent.' },
+  '/find-my-product': { title: 'Find the right TaxStreem product for your business', description: 'Say what you do and see which TaxStreem product fits: service businesses, shops and stock, personal income tax, a tax practice or a platform.' },
+  '/resources/glossary': { title: 'Nigerian tax terms in plain words: VAT, WHT, CIT, PIT and more', description: 'Plain meanings of the Nigerian tax terms businesses meet most: VAT, input VAT, Withholding Tax, Companies Income Tax, Personal Income Tax, e-invoicing and Tax ID.' },
+})
 
 export const BUTTONS: Record<string, string> = {
   'Sign Up': LINKS.start, 'Get Started': LINKS.start, 'Join the partner programme': LINKS.start, 'Log in': LINKS.login,

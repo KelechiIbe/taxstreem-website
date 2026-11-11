@@ -25,7 +25,7 @@ export function ConnectFilm() {
           <div className="mf-h">Connected accounts<span><Count value={s.lines} /> lines read</span></div>
           {BANKS.map(([n, d, logo], i) => (
             <div key={n} className="mf-row" data-on={s.on > i || undefined}>
-              <span className="mf-logo"><img src={asset(`/partners/${logo}.png`)} alt="" /></span>
+              <span className="mf-logo"><img src={asset(`/partners/${logo}.webp`)} alt="" /></span>
               <span className="mf-body"><b>{n}</b><i>{d}</i></span>
               <States value={s.on > i ? 'on' : 'off'} align="end" states={{ off: <Badge icon={<Spinner size={11} />}>Linking</Badge>, on: <Badge tone="success" icon={<Check on size={12} />}>Connected</Badge> }} />
             </div>
@@ -141,7 +141,7 @@ export function EInvoiceFilm() {
             <div className="mf-pl"><span>VAT · zero-rated</span><b>{naira(0)}</b></div>
             <div className="mf-pl mf-total"><span>Total paid</span><b>{naira(750)}</b></div>
           </div>
-          <div className="mf-toast" data-show={s.sent || undefined}><img src={asset('/partners/whatsapp.png')} alt="" /><span><b>Customer&rsquo;s copy sent</b><i>on WhatsApp, with the QR code</i></span></div>
+          <div className="mf-toast" data-show={s.sent || undefined}><img src={asset('/partners/whatsapp.webp')} alt="" /><span><b>Customer&rsquo;s copy sent</b><i>on WhatsApp, with the QR code</i></span></div>
         </>
       )}
     </Stage>

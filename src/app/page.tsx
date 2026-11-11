@@ -11,6 +11,8 @@ import { Aurora, Flow, Grain } from '../components/Backdrop'
 import { Photo } from '../components/Photo'
 import { Hub } from '../components/Hub'
 import { Later } from '../components/Later'
+import { SEO } from '../content/pages'
+import { pageMeta, ORG, ORG_ID, SITE_URL } from '../lib/seo'
 import { Spotlight } from '../components/Spotlight'
 import { LINKS, RESULTS, PRODUCTS, STEPS, FAQ } from '../content/site'
 import { asset, link } from '../lib/asset'
@@ -26,9 +28,11 @@ const FILMS = [<ConnectFilm key="c" />, <ReviewFilm key="r" />, <FileFilm key="f
 const PRESS_LINK: Record<string, string> = { forbes: 'https://www.forbes.com/sites/daraabasiita/2026/10/03/digital-invoices-may-give-ai-lenders-something-new-to-work-with/' }
 const PRESS: [string, string, number][] = [['Forbes', 'forbes', 26], ['TechCabal', 'techcabal', 25], ['The Guardian', 'guardian', 25], ['Punch', 'punch', 28], ['ThisDay', 'thisday', 31], ['Nairametrics', 'nairametrics', 19], ['BusinessDay', 'businessday', 27], ['Vanguard', 'vanguard', 22]]
 
+export const metadata = pageMeta('/', SEO['/'].title, SEO['/'].description)
+
 const jsonLd = [
-  { '@context': 'https://schema.org', '@type': 'Organization', name: 'TaxStreem', legalName: 'TaxStreem Technologies Inc.', url: 'https://www.taxstreem.com', logo: 'https://www.taxstreem.com/brand/taxstreem-logo-blue.svg', areaServed: 'NG', email: 'hello@taxstreem.com' },
-  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'TaxStreem', url: 'https://www.taxstreem.com' },
+  ORG,
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'TaxStreem', url: SITE_URL, inLanguage: 'en-NG', publisher: { '@id': ORG_ID } },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
 ]
 
@@ -39,12 +43,11 @@ export default function Home() {
       <Grain />
       <Header />
       <main>
-        <section className="hero">
-          <Aurora tone="plain" />
+        <section className="hero gs" data-g="base">
+          <Aurora tone="grad" />
           <div className="wrap hero-in">
             <h1 className="blurtext" aria-label="Tax Compliance Finally on Autopilot">
-              {['Tax', 'Compliance', 'Finally', 'on'].map((w, i) => <span key={w} aria-hidden style={{ ['--i' as string]: i }}>{w}{i === 1 ? <br /> : ' '}</span>)}
-              <span aria-hidden className="mark" style={{ ['--i' as string]: 4 }}>Autopilot<svg viewBox="0 0 300 18" preserveAspectRatio="none"><path d="M3 12 C 60 3, 120 3, 170 9 S 260 14, 297 5" /></svg></span>
+              {['Tax', 'Compliance', 'Finally', 'on', 'Autopilot'].map((w, i) => <span key={w} aria-hidden className={i === 2 ? 'dim' : undefined} style={{ ['--i' as string]: i }}>{w}{i === 1 ? <br /> : i < 4 ? ' ' : ''}</span>)}
             </h1>
             <p className="lede rise" style={{ ['--d' as string]: '160ms' }}>
               TaxStreem keeps your books from your bank, sales and supplier invoices. Then it prepares and files your VAT, WHT, CIT and PIT returns with the Nigeria Revenue Service (NRS) and your State Internal Revenue Service. You check and approve.
@@ -57,7 +60,6 @@ export default function Home() {
           </div>
           <div className="wrap rise" style={{ ['--d' as string]: '380ms' }}>
             <div className="hero-stage">
-              <i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Flow />
               <div className="hero-film"><HeroFilm /><i className="beam" aria-hidden /></div>
             </div>
           </div>
@@ -68,13 +70,13 @@ export default function Home() {
             <p>As covered in</p>
             <div className="backers">
               <span>Supported by</span>
-              <img src={asset('/partners/nvidia-inception.png')} alt="NVIDIA Inception Program" height={34} />
-              <img src={asset('/partners/google-for-startups.png')} alt="Google for Startups" height={20} />
+              <img src={asset('/partners/nvidia-inception.webp')} alt="NVIDIA Inception Program" height={34} />
+              <img src={asset('/partners/google-for-startups.webp')} alt="Google for Startups" height={20} />
             </div>
           </div>
           <div className="pmarq" aria-label="Press coverage: Forbes, TechCabal, The Guardian, Punch, ThisDay, Nairametrics, BusinessDay and Vanguard">
             <ul>
-              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}>{PRESS_LINK[f] ? <a href={PRESS_LINK[f]} target="_blank" rel="noopener" tabIndex={k > 0 ? -1 : undefined} aria-label={`${n}: read the article (opens in a new tab)`}><img src={asset(`/press/${f}.png`)} alt="" style={{ height: h }} loading="lazy" /></a> : <img src={asset(`/press/${f}.png`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" />}</li>))}
+              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}>{PRESS_LINK[f] ? <a href={PRESS_LINK[f]} target="_blank" rel="noopener" tabIndex={k > 0 ? -1 : undefined} aria-label={`${n}: read the article (opens in a new tab)`}><img src={asset(`/press/${f}.webp`)} alt="" style={{ height: h }} loading="lazy" /></a> : <img src={asset(`/press/${f}.webp`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" />}</li>))}
             </ul>
           </div>
         </section>
@@ -107,7 +109,7 @@ export default function Home() {
               {PRODUCTS.map((p, i) => (
                 <Reveal as="li" key={p.name} delay={i * 70} className="product">
                   <Spotlight href={link(p.href)}>
-                    <Photo n={i + 1} brief={PHOTO_BRIEFS[i]} ratio="4 / 3" src={`/photos/photo-${i + 1}.jpg`} alt={PHOTO_ALT[i]} />
+                    <Photo n={i + 1} brief={PHOTO_BRIEFS[i]} ratio="4 / 3" src={`/photos/photo-${i + 1}.webp`} alt={PHOTO_ALT[i]} />
                     <h3>{p.name}</h3>
                     <p className="product-who">{p.who}</p>
                     <p>{p.what}</p>
@@ -155,7 +157,7 @@ export default function Home() {
               <a className="btn btn-ghost" href={link('/countev')}>See Countev <ArrowRight size={16} /></a>
             </Reveal>
             <Reveal className="stack" delay={120} kind="wipe">
-              <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" src="/photos/photo-5.jpg" alt="A shopper checking a product against her phone beside a shelf" />
+              <Photo n={5} brief="A shop or pharmacy owner checking shelves with a phone in hand. Portrait." ratio="4 / 5" src="/photos/photo-5.webp" alt="A shopper checking a product against her phone beside a shelf" />
               <div className="film"><Later w={520} h={420} className="mf mf-stock"><InventoryFilm /></Later></div>
             </Reveal>
           </div>
@@ -169,7 +171,7 @@ export default function Home() {
               <a className="btn btn-ghost" href={link('/martina')}>Meet Martina <ArrowRight size={16} /></a>
             </Reveal>
             <Reveal className="stack-phone" delay={120} kind="wipe">
-              <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" src="/photos/photo-6.jpg" alt="A business owner reading a message on his phone" />
+              <Photo n={6} brief="A business owner reading a message on a phone, at a desk or counter. Portrait, subject on the right." ratio="auto" src="/photos/photo-6.webp" alt="A business owner reading a message on his phone" />
               <Later w={380} h={560} className="mc"><MartinaChat /></Later>
             </Reveal>
           </div>
@@ -228,7 +230,7 @@ export default function Home() {
         </section>
 
         <section className="closing">
-          <img className="closing-photo" src={asset('/photos/photo-7.jpg')} alt="" loading="lazy" />
+          <img className="closing-photo" src={asset('/photos/photo-7.webp')} alt="" loading="lazy" />
           <div className="closing-shade" aria-hidden />
           <div className="wrap">
             <Reveal kind="blur">

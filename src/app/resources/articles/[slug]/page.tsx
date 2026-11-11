@@ -19,7 +19,7 @@ export async function generateStaticParams() { return (await articles()).map((a)
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { article: a } = await article(params.slug)
   if (!a) return { title: 'Article not found | TaxStreem' }
-  return { title: `${a.title} | TaxStreem`, description: a.excerpt, alternates: { canonical: `/resources/articles/${a.slug}` }, openGraph: { title: a.title, description: a.excerpt, type: 'article', images: a.coverImage ? [a.coverImage] : undefined, publishedTime: a.publishedAt } }
+  return { title: `${a.title} | TaxStreem`, description: a.excerpt, alternates: { canonical: `/resources/articles/${a.slug}` }, openGraph: { title: a.title, description: a.excerpt, type: 'article', url: `/resources/articles/${a.slug}`, siteName: 'TaxStreem', locale: 'en_NG', images: a.coverImage ? [a.coverImage] : ['/og/resources.jpg'], publishedTime: a.publishedAt, modifiedTime: a.updatedAt }, twitter: { card: 'summary_large_image', site: '@taxstreem', title: a.title, description: a.excerpt, images: a.coverImage ? [a.coverImage] : ['/og/resources.jpg'] } }
 }
 
 const H = ({ html }: { html: string }) => <span dangerouslySetInnerHTML={{ __html: clean(html) }} />
@@ -54,7 +54,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   const { article: a, related } = await article(params.slug)
   if (!a) notFound()
   const toc = a.body.map((b, i) => ({ b, i })).filter(({ b }) => b.type === 'heading' && plain(b.text ?? ''))
-  const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: a.title, description: a.excerpt, image: a.coverImage || undefined, datePublished: a.publishedAt, dateModified: a.updatedAt, author: a.author?.fullName ? { '@type': 'Person', name: a.author.fullName } : undefined, publisher: { '@type': 'Organization', name: 'TaxStreem' }, mainEntityOfPage: `https://www.taxstreem.com/resources/articles/${a.slug}` }
+  const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: a.title, description: a.excerpt, image: a.coverImage || undefined, datePublished: a.publishedAt, dateModified: a.updatedAt, author: a.author?.fullName ? { '@type': 'Person', name: a.author.fullName } : undefined, publisher: { '@type': 'Organization', '@id': 'https://www.taxstreem.com/#organization', name: 'TaxStreem', url: 'https://www.taxstreem.com', logo: { '@type': 'ImageObject', url: 'https://www.taxstreem.com/brand/taxstreem-logo-blue.svg' } }, inLanguage: 'en-NG', mainEntityOfPage: `https://www.taxstreem.com/resources/articles/${a.slug}` }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />

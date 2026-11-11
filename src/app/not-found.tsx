@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main className="pg"><section className="pg-hero nf"><div className="wrap pg-hero-in"><div className="pg-hero-copy"><h1>{b[0].x}</h1><p className="lede">{b[1].x}</p><Buttons text={b[2].x} /></div></div></section></main>
+      <main className="pg"><section className="pg-hero gs nf" data-g="deep"><div className="wrap pg-hero-in"><div className="pg-hero-copy"><h1>{b[0].x}</h1><p className="lede">{b[1].x}</p><Buttons text={b[2].x} /></div></div></section></main>
       <Footer />
     </>
   )

@@ -22,12 +22,22 @@ import { HeroFilm } from '../../demos/HeroFilm'
 import { MartinaChat } from '../../demos/MartinaChat'
 import { ReviewFilm, FileFilm, ConnectFilm, EInvoiceFilm, InventoryFilm, PitFilm, PortalFilm } from '../../demos/MiniFilms'
 import { PAGES, COPY, SEO, PRODUCT_PATH, type Block, type PageDef } from '../../content/pages'
+import { pageMeta, software, SITE_URL, ORG_ID, FOUNDERS } from '../../lib/seo'
 import { LINKS } from '../../content/site'
 import bios from '../../content/bios.json'
 import { asset, link } from '../../lib/asset'
 
 type Tbl = Extract<Block, { k: 'table' }>
 type Txt = Extract<Block, { k: 'p' | 'h1' | 'h2' | 'h3' }>
+/* Each family of pages gets its own cut of the gradient. */
+const GRAD: Record<string, string> = {
+  '/service-businesses': 'azure', '/countev': 'azure', '/personal-income-tax': 'azure', '/martina': 'azure',
+  '/tax-professionals': 'violet', '/partners': 'violet',
+  '/security': 'deep', '/embedded-infrastructure': 'deep', '/e-invoicing': 'deep', '/modules': 'deep', '/integrations': 'deep',
+  '/about': 'aurora', '/careers': 'aurora', '/newsroom': 'aurora', '/contact': 'aurora',
+}
+const grad = (path: string) => GRAD[path] ?? (path.startsWith('/solutions/') ? 'flat' : 'base')
+
 const find = (slug: string[]) => PAGES.find((p) => p.path === '/' + slug.join('/'))!
 export const dynamicParams = false
 export function generateStaticParams() { return PAGES.map((p) => ({ slug: p.path.slice(1).split('/') })) }
@@ -54,15 +64,41 @@ function parts(def: PageDef) {
 
 export function generateMetadata({ params }: { params: { slug: string[] } }): Metadata {
   const def = find(params.slug); const p = parts(def); const s = SEO[def.path]
-  return { title: s?.title ?? `${p.h1.replace(/\.$/, '')} | TaxStreem`, description: s?.description ?? p.lede, alternates: { canonical: def.path } }
+  return pageMeta(def.path, s?.title ?? `${p.h1.replace(/\.$/, '')} | TaxStreem`, s?.description || p.lede)
 }
 
 const FILMS: Record<string, React.ReactNode> = { review: <ReviewFilm />, file: <FileFilm />, connect: <ConnectFilm />, einvoice: <EInvoiceFilm />, inventory: <InventoryFilm />, pit: <PitFilm />, portal: <PortalFilm /> }
 const ALT = ['', 'Two colleagues reviewing figures on a tablet', 'A pharmacist serving a customer', 'A freelancer working on a laptop at home', 'An accountant explaining a report to a client', '', 'A business owner reading a message on his phone', 'A small team gathered around a laptop']
 const SOL: Record<string, React.ReactNode> = { '/solutions/input-vat-recovery': <VatClaimFilm />, '/solutions/tax-refunds': <WhtCreditFilm />, '/solutions/clean-books': <StatementsFilm />, '/solutions/tax-filing': <ReturnsFilm />, '/solutions/finance-teams': <CloseFilm />, '/solutions/reconciliation': <ReconFilm />, '/tax-professionals': <PortalTour /> }
-const RAIL: Record<string, React.ReactNode> = { '/service-businesses': <ReviewFilm />, '/personal-income-tax': <ConnectFilm />, '/tax-professionals': <img className="rail-photo" src={asset('/photos/photo-4.jpg')} alt="An accountant explaining a report to a client" loading="lazy" /> }
+const RAIL: Record<string, React.ReactNode> = { '/service-businesses': <ReviewFilm />, '/personal-income-tax': <ConnectFilm />, '/tax-professionals': <img className="rail-photo" src={asset('/photos/photo-4.webp')} alt="An accountant explaining a report to a client" loading="lazy" /> }
 const IND_PHOTOS = ['A shop attendant carrying a basket of produce in a supermarket aisle', 'Two waiters laying a restaurant table', 'A worker checking metal profiles on a factory floor', 'A delivery driver moving cartons from a van', 'An adviser going through a document with two clients', 'A doctor typing notes at a clinic desk']
 const LOGO: Record<string, string> = { Mono: 'mono', Paystack: 'paystack', Flutterwave: 'flutterwave', Moniepoint: 'moniepoint', Bujeti: 'bujeti', QuickBooks: 'quickbooks', Xero: 'xero', 'Zoho Books': 'zoho-books', NRS: 'nrs', LIRS: 'lirs', 'NRS Merchant Buyer Solution': 'nrs', 'Corporate Affairs Commission (CAC)': 'cac', WhatsApp: 'whatsapp', Grey: 'grey', Upwork: 'upwork', Bumpa: 'bumpa' }
+
+/* Prices are read from the pricing copy, so the structured data can never disagree with the page. */
+const digits = (t: string) => t.replace(/[^\d]/g, '')
+const PR = COPY['Pricing']
+const prTable = PR.find((b): b is Tbl => b.k === 'table')!
+const monthly = prTable.rows.find((r) => r[0].x.startsWith('Monthly'))!
+const pitLine = PR.find((b) => b.k === 'p' && b.x.startsWith('Personal Income Tax:'))
+const PIT_PRICE = digits(((pitLine && 'x' in pitLine ? pitLine.x : '').match(/₦[\d,]+ a year/) ?? ['50000'])[0])
+const BUSINESS = [{ name: 'Starter', price: digits(monthly[1].x), per: 'month' as const, note: 'Per business, billed monthly. 15% off when paid yearly.' }, { name: 'Growth', price: digits(monthly[2].x), per: 'month' as const, note: 'Per business, billed monthly. 15% off when paid yearly.' }]
+const PIT = [{ name: 'Personal Income Tax', price: PIT_PRICE, per: 'year' as const }]
+const FREE = [{ name: 'Tax professionals', price: '0', per: 'month' as const, note: 'The practice portal is free for accountants and tax consultants.' }]
+
+function extraLd(path: string, tables: Tbl[]) {
+  const d = SEO[path]?.description ?? ''
+  if (path === '/service-businesses') return software('TaxStreem for Service Businesses', path, d, BUSINESS)
+  if (path === '/countev') return software('Countev by TaxStreem', path, d, BUSINESS)
+  if (path === '/personal-income-tax') return software('TaxStreem for Personal Income Tax', path, d, PIT)
+  if (path === '/tax-professionals') return software('TaxStreem for Tax Professionals', path, d, FREE)
+  if (path === '/pricing') return software('TaxStreem', path, d, [...BUSINESS, ...PIT, ...FREE])
+  if (path === '/about') return { '@context': 'https://schema.org', '@type': 'AboutPage', url: SITE_URL + path, name: 'About TaxStreem', mainEntity: { '@type': 'Organization', '@id': ORG_ID, name: 'TaxStreem', url: SITE_URL, founder: FOUNDERS } }
+  if (path === '/resources/glossary' && tables[0]) {
+    const set = `${SITE_URL}${path}`
+    return { '@context': 'https://schema.org', '@type': 'DefinedTermSet', '@id': set, name: 'Nigerian tax terms in plain words', url: set, inLanguage: 'en-NG', publisher: { '@id': ORG_ID }, hasDefinedTerm: tables[0].rows.map((r) => ({ '@type': 'DefinedTerm', name: r[0].x, description: r[1].x, inDefinedTermSet: set })) }
+  }
+  return null
+}
 
 export default function Page({ params }: { params: { slug: string[] } }) {
   const def = find(params.slug)
@@ -75,6 +111,8 @@ export default function Page({ params }: { params: { slug: string[] } }) {
   const about = def.kind === 'about'
   const faq = rest.flatMap((b, i) => (b.k === 'p' && b.r.length > 1 && b.r[0].b && b.r[0].t.trim().endsWith('?') ? [{ '@type': 'Question', name: b.r[0].t.trim(), acceptedAnswer: { '@type': 'Answer', text: b.r.slice(1).map((r) => r.t).join('').trim() } }] : []))
   const ld = [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.taxstreem.com/' }, { '@type': 'ListItem', position: 2, name: h1, item: 'https://www.taxstreem.com' + def.path }] }, ...(faq.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq }] : [])]
+  const more = extraLd(def.path, tables)
+  if (more) ld.push(more as never)
   const closeText = closing.replace(/\[[^\]]+\]/g, '').trim() || 'Month-end is coming. Have it done.'
   const closeBtns = closing.match(/\[[^\]]+\]/g)?.join(' ') || '[Sign Up] [Talk to us]'
 
@@ -84,8 +122,8 @@ export default function Page({ params }: { params: { slug: string[] } }) {
       <Grain />
       <Header />
       <main className="pg">
-        <section className="pg-hero" data-side={side || undefined} data-v={v || undefined} data-dark={def.path === '/security' || undefined}>
-          <Aurora tone={def.path === '/security' ? 'dark' : 'plain'} />
+        <section className="pg-hero gs" data-g={grad(def.path)} data-side={side || undefined} data-v={v || undefined}>
+          <Aurora tone="grad" />
           <div className="wrap pg-hero-in">
             <div className="pg-hero-copy">
               <h1 className="rise">{h1}</h1>
@@ -94,11 +132,11 @@ export default function Page({ params }: { params: { slug: string[] } }) {
               {def.kind === 'contact' && tables[0] && <ul className="clist rise" style={{ ['--d' as string]: '200ms' }}>{tables[0].rows.map((r) => <li key={r[0].x}><span>{r[0].x}</span><a href={`mailto:${r[1].x}`}>{r[1].x}</a></li>)}</ul>}
             </div>
             {def.kind === 'contact' && <div className="rise" style={{ ['--d' as string]: '260ms' }}><ContactForm /></div>}
-            {v === 'martina' && <div className="stack-phone rise" style={{ ['--d' as string]: '260ms' }}><Photo n={6} brief="" ratio="auto" src="/photos/photo-6.jpg" alt={ALT[6]} /><MartinaChat /></div>}
-            {v === 'app' && def.photo && <div className="pg-shot rise" style={{ ['--d' as string]: '260ms' }}><Photo n={def.photo} brief="" ratio="4 / 3" src={`/photos/photo-${def.photo}.jpg`} alt={ALT[def.photo]} /></div>}
+            {v === 'martina' && <div className="stack-phone rise" style={{ ['--d' as string]: '260ms' }}><Photo n={6} brief="" ratio="auto" src="/photos/photo-6.webp" alt={ALT[6]} /><MartinaChat /></div>}
+            {v === 'app' && def.photo && <div className="pg-shot rise" style={{ ['--d' as string]: '260ms' }}><Photo n={def.photo} brief="" ratio="4 / 3" src={`/photos/photo-${def.photo}.webp`} alt={ALT[def.photo]} /></div>}
             {v && FILMS[v] && (
               <div className="stack rise" style={{ ['--d' as string]: '260ms' }} data-solo={!def.photo || undefined}>
-                {def.photo ? <Photo n={def.photo} brief="" ratio="4 / 5" src={`/photos/photo-${v === 'inventory' ? 5 : def.photo}.jpg`} alt={ALT[v === 'inventory' ? 2 : def.photo]} /> : <div className="vstage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /></div>}
+                {def.photo ? <Photo n={def.photo} brief="" ratio="4 / 5" src={`/photos/photo-${v === 'inventory' ? 5 : def.photo}.webp`} alt={ALT[v === 'inventory' ? 2 : def.photo]} /> : <div className="vstage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /></div>}
                 <div className="film">{FILMS[v]}</div>
               </div>
             )}
@@ -108,7 +146,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
               </div>
             )}
           </div>
-          {sol && <div className="wrap rise" style={{ ['--d' as string]: '300ms' }}><div className="hero-stage"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><Flow /><div className="hero-film">{sol}<i className="beam" aria-hidden /></div></div></div>}
+          {sol && <div className="wrap rise" style={{ ['--d' as string]: '300ms' }}><div className="hero-stage"><div className="hero-film">{sol}<i className="beam" aria-hidden /></div></div></div>}
         </section>
 
         {def.path === '/tax-professionals' && <section className="sec sec-dark"><Aurora tone="dark" /><div className="wrap"><Reveal className="sec-head" kind="blur"><h2>Try the portal here. Run a practice for a minute.</h2></Reveal><Reveal><LivePortal /></Reveal></div></section>}
@@ -146,14 +184,14 @@ export default function Page({ params }: { params: { slug: string[] } }) {
         {def.cms === 'Newsroom' && <NewsroomBody />}
         {def.cms === 'Careers' && (
           <section className="sec pg-first"><div className="wrap">
-            <ul className="pslots two"><Reveal as="li" kind="wipe"><Photo n={18} brief="" ratio="16 / 10" src="/photos/photo-18.jpg" alt="Three teammates working through figures at a shared desk" /></Reveal><Reveal as="li" kind="wipe" delay={100}><Photo n={19} brief="" ratio="16 / 10" src="/photos/photo-19.jpg" alt="Two engineers reviewing work on a monitor" /></Reveal></ul>
+            <ul className="pslots two"><Reveal as="li" kind="wipe"><Photo n={18} brief="" ratio="16 / 10" src="/photos/photo-18.webp" alt="Three teammates working through figures at a shared desk" /></Reveal><Reveal as="li" kind="wipe" delay={100}><Photo n={19} brief="" ratio="16 / 10" src="/photos/photo-19.webp" alt="Two engineers reviewing work on a monitor" /></Reveal></ul>
             <div className="cms"><b>Open roles will be listed here.</b><p>This page fills from the TaxStreem CMS once roles are published there. Until then, write to us about working at TaxStreem.</p><p style={{ margin: 0 }}><a className="btn btn-primary" href={link('/contact')}>Contact us <ArrowRight size={16} /></a></p></div>
           </div></section>
         )}
 
         {def.kind === 'industries' && tables[0] && (
           <section className="chap"><div className="wrap">
-            <ul className="pslots">{IND_PHOTOS.map((brief, i) => <Reveal as="li" key={i} delay={i * 60} kind="wipe"><Photo n={12 + i} brief="" ratio="3 / 4" src={`/photos/photo-${12 + i}.jpg`} alt={brief} /></Reveal>)}</ul>
+            <ul className="pslots">{IND_PHOTOS.map((brief, i) => <Reveal as="li" key={i} delay={i * 60} kind="wipe"><Photo n={12 + i} brief="" ratio="3 / 4" src={`/photos/photo-${12 + i}.webp`} alt={brief} /></Reveal>)}</ul>
             <ul className="inds">
               {tables[0].rows.map((r, i) => (
                 <Reveal as="li" key={r[0].x} delay={Math.min(i, 5) * 50} style={{ ['--i' as string]: Math.min(i, 7) }}>
@@ -181,7 +219,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
                   <Reveal kind="blur"><p className="ab-big">{origin.slice(0, cut)}</p></Reveal>
                   <Reveal delay={120}><p className="ab-rest">{origin.slice(cut).trim()}</p></Reveal>
                 </div>
-                <Reveal kind="wipe" className="ab-photo"><img src={asset('/photos/photo-18.jpg')} alt="Three teammates working through figures at a shared desk" loading="lazy" /></Reveal>
+                <Reveal kind="wipe" className="ab-photo"><img src={asset('/photos/photo-18.webp')} alt="Three teammates working through figures at a shared desk" loading="lazy" /></Reveal>
                 <div className="ab-vm">
                   <Reveal className="ab-card ab-vision"><i className="mesh" aria-hidden /><i className="gridlines" aria-hidden /><h2>Vision</h2><p>{note('Vision')}</p></Reveal>
                   <Reveal className="ab-card ab-mission" delay={100}><h2>Mission</h2><p>{note('Mission')}</p></Reveal>
@@ -192,7 +230,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
                     <ul className="ab-roles">{['Tax lawyers', 'Accountants', 'Engineers'].map((r, i) => <Reveal as="li" key={r} delay={i * 80}>{r}</Reveal>)}</ul>
                     <p>{who.slice(who.indexOf('. ') + 2)}</p>
                     <dl className="ab-facts">
-                      <div><dt>Supported by</dt><dd className="ab-logos"><img src={asset('/partners/nvidia-inception.png')} alt="NVIDIA Inception" loading="lazy" /><img src={asset('/partners/google-for-startups.png')} alt="Google for Startups" loading="lazy" /></dd></div>
+                      <div><dt>Supported by</dt><dd className="ab-logos"><img src={asset('/partners/nvidia-inception.webp')} alt="NVIDIA Inception" loading="lazy" /><img src={asset('/partners/google-for-startups.webp')} alt="Google for Startups" loading="lazy" /></dd></div>
                       <div><dt>Offices</dt><dd>{(sup?.x.split('Offices:')[1] ?? 'Lagos, Nigeria and Delaware, USA.').trim().replace(/\.$/, '')}</dd></div>
                     </dl>
                     {btns && <Buttons text={btns.x} />}
@@ -204,7 +242,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
                 <ul className="founders">
                   {([['Kelechi Ibe', 'Co-Founder and CEO', 'kelechi-ibe', bios.kelechi, 'https://www.linkedin.com/in/kelechi-ibe/', 'https://x.com/IbeKelechi_'], ['Ayo Samuel', 'Co-Founder and CTO', 'ayo-samuel', bios.ayo, 'https://www.linkedin.com/in/sam-ayo/', 'https://x.com/officialsamayo']] as const).map(([n, role, f, bio, li, x], i) => (
                     <Reveal as="li" key={n} delay={i * 100}>
-                      <img src={asset(`/team/${f}-bw.jpg`)} alt={n} loading="lazy" width={840} height={1120} />
+                      <img src={asset(`/team/${f}-bw.webp`)} alt={n} loading="lazy" width={840} height={1120} />
                       <div><h3>{n}</h3><b>{role}</b><Bio paras={bio} id={`bio-${f}`} />
                         <p className="socials">
                           <a href={li} target="_blank" rel="noopener" aria-label={`${n} on LinkedIn`}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" /></svg></a>
@@ -221,7 +259,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
         {!about && !['glossary', 'contact', 'industries', 'cms'].includes(def.kind ?? '') && body.length > 0 && <Chapters blocks={body} rail={RAIL[def.path]} dark={v !== 'app' && def.path !== '/tax-professionals' && !def.kind} />}
 
         <section className="closing">
-          <img className="closing-photo" src={asset('/photos/photo-7.jpg')} alt="" loading="lazy" />
+          <img className="closing-photo" src={asset('/photos/photo-7.webp')} alt="" loading="lazy" />
           <div className="closing-shade" aria-hidden />
           <div className="wrap"><Reveal kind="blur"><h2>{closeText}</h2><div style={{ marginTop: 32 }}><Buttons text={closeBtns} light /></div></Reveal></div>
         </section>

@@ -3,6 +3,7 @@ import { articles, videos, newsroom, events, pic, day, label, mins, type Article
 import { asset, link } from '../lib/asset'
 import { Reveal } from './Reveal'
 import { Aurora } from './Backdrop'
+import { SITE_URL, ORG_ID } from '../lib/seo'
 
 const PRESS: Record<string, string> = { punch: 'punch', thisday: 'thisday', vanguard: 'vanguard', nairametrics: 'nairametrics', 'the guardian': 'guardian', businessday: 'businessday', techcabal: 'techcabal', forbes: 'forbes' }
 
@@ -30,8 +31,18 @@ export async function ResourcesBody({ bridgeLine }: { bridgeLine: string }) {
   const now = new Date().toISOString()
   const next = [...evs].reverse().find((e) => e.date > now)
   const past = evs.filter((e) => e.date <= now).slice(0, 4)
+  const yt = (u: string) => (u.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{6,})/) ?? [])[1]
+  const ld = [
+    { '@context': 'https://schema.org', '@type': 'ItemList', name: 'TaxStreem articles', itemListElement: arts.map((a, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE_URL}/resources/articles/${a.slug}`, name: a.title })) },
+    ...vids.map((v) => ({
+      '@context': 'https://schema.org', '@type': 'VideoObject', name: v.title, description: v.description || v.title, uploadDate: v.publishedAt,
+      thumbnailUrl: v.thumbnail || `${SITE_URL}/og/resources.jpg`, contentUrl: v.videoUrl, ...(yt(v.videoUrl) ? { embedUrl: `https://www.youtube.com/embed/${yt(v.videoUrl)}` } : {}),
+      ...(Number(v.durationSeconds) > 0 ? { duration: `PT${Math.floor(Number(v.durationSeconds) / 60)}M${Number(v.durationSeconds) % 60}S` } : {}), publisher: { '@id': ORG_ID },
+    })),
+  ]
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
       <section className="chap" id="articles"><div className="wrap">
         <nav className="rtabs" aria-label="Resources">
           <a href="#articles">Articles <i>{arts.length}</i></a>{vids.length > 0 && <a href="#videos">Videos <i>{vids.length}</i></a>}<a href="#the-bridge">The Bridge</a><a href={link('/resources/glossary')}>Tax glossary</a>
@@ -85,8 +96,8 @@ export async function NewsroomBody() {
           return (
             <Reveal as="li" key={n.id} delay={Math.min(i % 3, 2) * 70} style={{ ['--i' as string]: Math.min(i, 7) }}>
               <a href={n.externalUrl} target="_blank" rel="noopener">
-                <span className="nthumb"><b aria-hidden>{logo ? <img src={asset(`/press/${logo}.png`)} alt="" /> : pub}</b>{n.thumbnail && <img className="nthumb-pic" src={pic(n.thumbnail)} alt="" loading="lazy" referrerPolicy="no-referrer" />}</span>
-                <span className="npub">{logo ? <img src={asset(`/press/${logo}.png`)} alt={pub} /> : <b>{pub}</b>}<i>{label(n.category)}</i></span>
+                <span className="nthumb"><b aria-hidden>{logo ? <img src={asset(`/press/${logo}.webp`)} alt="" /> : pub}</b>{n.thumbnail && <img className="nthumb-pic" src={pic(n.thumbnail)} alt="" loading="lazy" referrerPolicy="no-referrer" />}</span>
+                <span className="npub">{logo ? <img src={asset(`/press/${logo}.webp`)} alt={pub} /> : <b>{pub}</b>}<i>{label(n.category)}</i></span>
                 <h3>{n.title}</h3>
                 <p>{n.excerpt}</p>
                 <span className="rcard-by">Read on {pub}<ArrowUpRight size={16} /></span>
