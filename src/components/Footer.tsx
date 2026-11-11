@@ -1,6 +1,7 @@
 import { LINKS, NAV } from '../content/site'
 import { asset, link } from '../lib/asset'
 import { Newsletter } from './Newsletter'
+import { Social } from './Social'
 
 const col = (label: string) => NAV.find((n) => n.label === label)!.groups!.flatMap((g) => g.links)
 const COLS: [string, { label: string; href: string; external?: boolean }[]][] = [
@@ -20,6 +21,7 @@ export function Footer() {
         <div className="ftr-top">
           <img src={asset('/brand/taxstreem-logo-white.svg')} alt="TaxStreem" width={140} height={26} />
           <p>Tax and accounting infrastructure for African businesses. Live in Nigeria.</p>
+          <Social />
         </div>
         <div className="ftr-news" id="newsletter"><Newsletter id="news-footer" /></div>
         <div className="ftr-cols">

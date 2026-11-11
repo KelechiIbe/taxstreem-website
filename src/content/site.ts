@@ -153,3 +153,11 @@ export const PARTNER_LOGOS = [
   ['quickbooks', 'QuickBooks'], ['xero', 'Xero'], ['zoho-books', 'Zoho Books'], ['nrs', 'Nigeria Revenue Service'], ['lirs', 'Lagos State Internal Revenue Service'],
   ['cac', 'Corporate Affairs Commission'], ['whatsapp', 'WhatsApp'],
 ] as const
+
+/** Company profiles, in the order they are shown. */
+export const SOCIAL: [string, string][] = [
+  ['LinkedIn', 'https://linkedin.com/company/taxstreem'],
+  ['X', 'https://x.com/taxstreem'],
+  ['YouTube', 'https://youtube.com/@taxstreem'],
+  ['Instagram', 'https://instagram.com/taxstreem'],
+]

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL } from '../content/site'
 
 export const SITE_URL = 'https://www.taxstreem.com'
 export const ORG_ID = `${SITE_URL}/#organization`
@@ -32,7 +33,7 @@ export const ORG = {
     { '@type': 'ContactPoint', contactType: 'sales', email: 'sales@taxstreem.com', areaServed: 'NG', availableLanguage: 'en' },
     { '@type': 'ContactPoint', contactType: 'customer support', email: 'support@taxstreem.com', areaServed: 'NG', availableLanguage: 'en' },
   ],
-  sameAs: ['https://www.linkedin.com/company/taxstreem', 'https://x.com/taxstreem', 'https://www.instagram.com/taxstreem', 'https://www.youtube.com/@taxstreem'],
+  sameAs: SOCIAL.map(([, href]) => href),
   founder: FOUNDERS,
 }
 
