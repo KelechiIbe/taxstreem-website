@@ -7,12 +7,13 @@ import { LiveProduct } from '../components/LiveProduct'
 import { HeroFilm } from '../demos/HeroFilm'
 import { MartinaChat } from '../demos/MartinaChat'
 import { ConnectFilm, ReviewFilm, FileFilm, EInvoiceFilm, InventoryFilm } from '../demos/MiniFilms'
-import { Aurora, Flow, Grain } from '../components/Backdrop'
+import { Aurora, Grain } from '../components/Backdrop'
 import { Photo } from '../components/Photo'
 import { Hub } from '../components/Hub'
 import { Later } from '../components/Later'
 import { SEO } from '../content/pages'
-import { pageMeta, ORG, ORG_ID, SITE_URL } from '../lib/seo'
+import { pageMeta, pressLd, FORBES, ORG, ORG_ID, SITE_URL } from '../lib/seo'
+import { newsroom } from '../lib/cms'
 import { Spotlight } from '../components/Spotlight'
 import { LINKS, RESULTS, PRODUCTS, STEPS, FAQ } from '../content/site'
 import { asset, link } from '../lib/asset'
@@ -30,16 +31,21 @@ const PRESS: [string, string, number][] = [['Forbes', 'forbes', 26], ['TechCabal
 
 export const metadata = pageMeta('/', SEO['/'].title, SEO['/'].description)
 
-const jsonLd = [
-  ORG,
+const jsonLd = (press: Awaited<ReturnType<typeof newsroom>>) => [
+  { ...ORG, subjectOf: pressLd([{ title: FORBES.title, externalUrl: FORBES.url, publication: FORBES.publication }, ...press]) },
   { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'TaxStreem', url: SITE_URL, inLanguage: 'en-NG', publisher: { '@id': ORG_ID } },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
 ]
 
-export default function Home() {
+/* Each press logo opens that outlet's piece on TaxStreem. The address comes from the newsroom in the CMS. */
+const outlet = (name: string) => name.trim().toLowerCase().replace(/^the /, '').replace(/[^a-z]/g, '')
+
+export default async function Home() {
+  const press = await newsroom()
+  const pressLink: Record<string, string> = { ...Object.fromEntries(press.map((n) => [outlet(n.publication), n.externalUrl])), ...PRESS_LINK }
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(press)).replace(/</g, '\\u003c') }} />
       <Grain />
       <Header />
       <main>
@@ -76,7 +82,7 @@ export default function Home() {
           </div>
           <div className="pmarq" aria-label="Press coverage: Forbes, TechCabal, The Guardian, Punch, ThisDay, Nairametrics, BusinessDay and Vanguard">
             <ul>
-              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}>{PRESS_LINK[f] ? <a href={PRESS_LINK[f]} target="_blank" rel="noopener" tabIndex={k > 0 ? -1 : undefined} aria-label={`${n}: read the article (opens in a new tab)`}><img src={asset(`/press/${f}.webp`)} alt="" style={{ height: h }} loading="lazy" /></a> : <img src={asset(`/press/${f}.webp`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" />}</li>))}
+              {[0, 1, 2, 3].flatMap((k) => PRESS.map(([n, f, h]) => <li key={f + k} aria-hidden={k > 0 || undefined}>{pressLink[f] ? <a href={pressLink[f]} target="_blank" rel="noopener" tabIndex={k > 0 ? -1 : undefined} aria-label={`${n}: read the article (opens in a new tab)`}><img src={asset(`/press/${f}.webp`)} alt="" style={{ height: h }} loading="lazy" /></a> : <img src={asset(`/press/${f}.webp`)} alt={k === 0 ? n : ''} style={{ height: h }} loading="lazy" />}</li>))}
             </ul>
           </div>
         </section>

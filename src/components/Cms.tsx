@@ -3,7 +3,7 @@ import { articles, videos, newsroom, events, pic, day, label, mins, type Article
 import { asset, link } from '../lib/asset'
 import { Reveal } from './Reveal'
 import { Aurora } from './Backdrop'
-import { SITE_URL, ORG_ID } from '../lib/seo'
+import { SITE_URL, ORG_ID, pressLd } from '../lib/seo'
 
 const PRESS: Record<string, string> = { punch: 'punch', thisday: 'thisday', vanguard: 'vanguard', nairametrics: 'nairametrics', 'the guardian': 'guardian', businessday: 'businessday', techcabal: 'techcabal', forbes: 'forbes' }
 
@@ -88,8 +88,10 @@ export async function ResourcesBody({ bridgeLine }: { bridgeLine: string }) {
 export async function NewsroomBody() {
   const items = await newsroom()
   if (!items.length) return <section className="chap"><div className="wrap"><p className="ptext">Press coverage appears here as it is published.</p></div></section>
+  const ld = { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Press coverage of TaxStreem', itemListElement: pressLd(items).map((n, i) => ({ '@type': 'ListItem', position: i + 1, item: n })) }
   return (
     <section className="chap"><div className="wrap">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
       <ul className="ngrid">
         {items.map((n, i) => {
           const pub = n.publication.trim(); const logo = PRESS[pub.toLowerCase()]

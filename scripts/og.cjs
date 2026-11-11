@@ -31,7 +31,6 @@ h1{font-weight:700;letter-spacing:-.04em;line-height:1.03;max-width:980px;margin
 .foot{margin-top:34px;display:flex;align-items:center;gap:16px;font-size:25px;font-weight:500;color:rgba(255,255,255,.86)}
 .foot b{font-weight:600;color:#fff}.foot i{width:28px;height:1px;background:rgba(255,255,255,.6)}
 </style><body><div class="rules">${'<i></i>'.repeat(9)}</div>
-<svg class="flow" viewBox="0 0 1440 700" preserveAspectRatio="none" fill="none" stroke="#fff" stroke-width="1.4"><path d="M-50 420 C 250 300, 420 520, 720 380 S 1180 180, 1500 300"/><path d="M-50 500 C 300 420, 480 600, 760 470 S 1200 280, 1500 400"/><path d="M-50 580 C 320 520, 520 660, 800 560 S 1220 400, 1500 500"/></svg>
 <div class="in"><div class="logo">${logo}</div><h1 id="h">${esc(h1)}</h1><div class="foot"><b>taxstreem.com</b><i></i><span>Accounting and tax software for Nigeria</span></div></div>
 <script>(function(){var h=document.getElementById('h'),s=86;h.style.fontSize=s+'px';while(h.offsetHeight>300&&s>44){s-=2;h.style.fontSize=s+'px'}})()</script></body>`
 

@@ -4,7 +4,6 @@ export function Aurora({ tone = 'light' }: { tone?: 'light' | 'dark' | 'blue' | 
     <div className="bg" data-tone={tone} aria-hidden>
       <i className="blob b1" /><i className="blob b2" /><i className="blob b3" />
       <div className="rules">{Array.from({ length: 9 }, (_, i) => <span key={i} style={{ ['--i' as string]: i }} />)}</div>
-      <Flow />
     </div>
   )
 }

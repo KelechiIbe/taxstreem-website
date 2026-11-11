@@ -1,4 +1,5 @@
-# TaxStreem
+/** The standing part of /llms.txt, the plain summary AI assistants read. Guides and press are added live by the route. */
+export const LLMS = `# TaxStreem
 
 > TaxStreem is tax and accounting software for businesses and individuals in Nigeria. It keeps the books, recovers input VAT, and prepares and files Value Added Tax (VAT), Withholding Tax (WHT), Companies Income Tax (CIT) and Personal Income Tax (PIT) returns with the Nigeria Revenue Service (NRS) and State Internal Revenue Services. Built for Africa, live in Nigeria.
 
@@ -44,3 +45,4 @@
 - Developer portal: https://developer-portal.taxstreem.com/
 - Contact: hello@taxstreem.com, sales@taxstreem.com
 - Company: TaxStreem Technologies Inc., Lagos, Nigeria and Delaware, USA.
+`
